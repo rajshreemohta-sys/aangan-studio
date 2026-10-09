@@ -52,9 +52,6 @@ export function Nav({ active }: { active: "dashboard" | "leads" | "simulate" | "
         {link("/dashboard", "Dashboard", active === "dashboard")}
         {link("/dashboard/leads", "Leads & follow-ups", active === "leads")}
         {link("/dashboard/simulate", "Simulate call", active === "simulate")}
-        <Link href="/talk" className="label hover:text-ink transition-colors" target="_blank">
-          Talk to Vaani ↗
-        </Link>
       </nav>
     </header>
   );
