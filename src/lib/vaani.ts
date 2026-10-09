@@ -131,7 +131,7 @@ export function agentPrompt(): string {
   return basePrompt;
 }
 
-export const INBOUND_GREETING = "Hello, you've reached Aangan Studio, this is Vaani. How can I help you today?";
+export const INBOUND_GREETING = "Hello, and thank you for calling Aangan Studio! This is Vaani. How may I help you today?";
 
 export type CallbackBrief = { reason: "follow_up" | "dropped_call" | "web_enquiry"; name: string | null; known: string; ask: string | null };
 
@@ -215,7 +215,7 @@ export async function updatePersona(agentId: string): Promise<{ voiceName: strin
     body: JSON.stringify({
       identity: {
         system_prompt: agentPrompt(),
-        personality: { name: "Vaani", gender: "female", tone: "warm, calm, unhurried", style: "brief, one question at a time" },
+        personality: { name: "Vaani", gender: "female", tone: "very polite, sweet, warm and caring", style: "gentle, brief, one question at a time, always says please and thank you" },
         greeting_message: { agent_message: INBOUND_GREETING, agent_speech_delay: 1, interruptible: true, let_user_speak_first: false },
       },
     }),
