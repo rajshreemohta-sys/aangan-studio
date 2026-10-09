@@ -15,6 +15,7 @@ Phone only. WhatsApp and the web form are out of scope (see [Extending to other 
 ```mermaid
 flowchart LR
     A[Caller rings studio number] --> V((Vaani voice agent<br/>prompts/vaani-agent.md))
+    F[Website form / Call with Vaani button /<br/>dropped call] -->|trigger-call| V
     V -->|post-call webhook<br/>secret-verified| W["/api/vaani/webhook"]
     S["/dashboard/simulate<br/>(paste a transcript)"] --> PL
 
@@ -40,7 +41,7 @@ flowchart LR
 | Decision rules (deterministic) | [`src/lib/classification.ts`](src/lib/classification.ts) → `decide()` |
 | Post-call pipeline | [`src/lib/pipeline.ts`](src/lib/pipeline.ts) |
 | Slot finding | [`src/lib/slots.ts`](src/lib/slots.ts) |
-| Vaani webhook adapter | [`src/lib/vaani.ts`](src/lib/vaani.ts) |
+| Vaani API + webhook adapter | [`src/lib/vaani.ts`](src/lib/vaani.ts) |
 | Calendar / Resend | `src/lib/google-calendar.ts`, `resend.ts` |
 | Schema | [`db/schema.sql`](db/schema.sql) |
 | Database access (Neon) | [`src/lib/db.ts`](src/lib/db.ts) |
@@ -81,11 +82,11 @@ Three consecutive runs all matched 19/19. Classifying all 19 costs about ₹10.5
 | Service | What to get | Env vars |
 |---|---|---|
 | **Neon** | Postgres database (created: `aangan-studio-db`, Singapore, via the Vercel marketplace — the connection string is added to Vercel automatically) | `DATABASE_URL` |
-| **Vaani** | The studio number pointed at the agent, and a webhook secret you choose | `VAANI_WEBHOOK_SECRET`, `VAANI_RATE_PER_MIN` |
+| **Vaani** | API key (app.vaanivoice.ai → API Keys); `npm run vaani:setup` creates the agent | `VAANI_API_KEY`, `VAANI_AGENT_ID`, `VAANI_PHONE_NUMBER`, `VAANI_OUTBOUND_NUMBER`, `VAANI_WEBHOOK_SECRET`, `VAANI_RATE_PER_MIN` |
 | **Gemini** | API key from Google AI Studio | `GEMINI_API_KEY`, `GEMINI_MODEL`, `GEMINI_INR_PER_1M_INPUT`, `GEMINI_INR_PER_1M_OUTPUT` |
 | **Google Calendar** | OAuth client (Desktop or Web) + a refresh token for a studio Google account that has *Make changes to events* on every designer's calendar | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REFRESH_TOKEN` |
 | **Resend** | API key and a verified sending domain | `RESEND_API_KEY`, `RESEND_FROM`, `RESEND_INR_PER_EMAIL`, `ESCALATION_EMAIL` |
-| **App** | Public URL, used in transcript links in emails | `APP_URL` |
+| **App** | Public URL, and a secret for the website enquiry endpoint | `APP_URL`, `ENQUIRY_SECRET` |
 
 All variables are listed with comments in [`.env.example`](.env.example).
 
@@ -114,11 +115,22 @@ insert into designers (name, email, calendar_id) values
   ('Designer Name', 'designer@aangan.studio', 'designer@aangan.studio');
 ```
 
-### 4. Vaani
+### 4. Vaani (app.vaanivoice.ai)
 
-1. Paste [`prompts/vaani-agent.md`](prompts/vaani-agent.md) into the agent's system prompt. Add a `flag_escalation` function if Vaani supports custom functions.
-2. Set the post-call webhook to `https://<your-app>/api/vaani/webhook` and the secret to `VAANI_WEBHOOK_SECRET`. The route accepts an HMAC-SHA256 signature (`x-vaani-signature`), a shared-secret header (`x-webhook-secret` or `Authorization: Bearer`), or `?secret=` in the URL — whichever Vaani supports.
-3. `src/lib/vaani.ts` reads the webhook payload defensively (`call_id`/`id`, `transcript` as a string or a list of turns, `duration`/`duration_seconds`, …) because the post-call payload isn't documented publicly. Check one real payload (stored in `calls.raw_payload`) against `normaliseWebhook` and adjust field names if needed.
+1. In the Vaani dashboard create an **API key** and put it in `.env.local` as `VAANI_API_KEY`. If the studio number is already in Vaani, add it as `VAANI_PHONE_NUMBER` (E.164, e.g. `+912012345678`).
+2. Run `npm run vaani:setup`. It creates the agent (first run — saves `VAANI_AGENT_ID` to `.env.local`) or updates it, uploads [`prompts/vaani-agent.md`](prompts/vaani-agent.md) as the system prompt with the greeting and language auto-detect, and routes the studio number to it. Re-run it whenever the prompt changes.
+3. In Vaani → **Settings → Webhooks**, add `https://<your-app>/api/vaani/webhook?secret=<VAANI_WEBHOOK_SECRET>`.
+4. Copy `VAANI_API_KEY` and `VAANI_AGENT_ID` (and the phone number variables, if set) to Vercel.
+
+How the app uses Vaani ([`src/lib/vaani.ts`](src/lib/vaani.ts), [docs](https://docs.vaanivoice.ai)):
+
+- **Inbound calls** → Vaani's `call_postprocessing` webhook carries the transcript; the caller's number comes from Vaani's call history.
+- **Outbound calls** (`POST /api/trigger-call/`), each with a callback brief passed as a per-call prompt override so Vaani doesn't re-ask what we know:
+  - **Call with Vaani** button on every follow-up in the dashboard.
+  - **Dropped calls**: an inbound call classified INCOMPLETE gets an automatic callback straight away.
+  - **Web enquiries**: `/enquire` is a ready-made form, and `POST /api/enquiry?secret=<ENQUIRY_SECRET>` (JSON or form data: `name`, `phone`, `email`, `locality`, `message`) lets the studio website's own form trigger the same callback.
+- When a callback succeeds, the follow-up it was for closes itself. No-answer / rejected / failed callbacks show on the follow-up.
+- Guardrails: at most one automatic call per number per 24 h, 20 outbound calls per hour in total.
 
 ### 5. Deploy
 
@@ -142,7 +154,7 @@ The seeded data is September's front-desk calls, so the transcripts show a perso
 The pipeline only needs a transcript and a timestamp, so WhatsApp and the web form plug in at `insertCall()` → `processCall()`:
 
 - **WhatsApp Business:** a webhook that collects a thread until the customer goes quiet, then sends the thread as the transcript. Vaani's rules (never price, never reject) become the auto-reply prompt.
-- **Web form:** map form fields to a `Field: value` transcript; most leads arrive with every field filled, so they qualify or route instantly. A Vaani outbound callback within 5 minutes of a form submission is the natural next step (the earlier HubSpot-triggered callback was removed with HubSpot).
+- **Web form:** already wired — a form submission makes Vaani call the person back within a minute or two (see Vaani above).
 
 ## Scripts
 
@@ -150,6 +162,8 @@ The pipeline only needs a transcript and a timestamp, so WhatsApp and the web fo
 |---|---|
 | `npm run dev` | Local dev server |
 | `npm run eval` | Classifier test on T01–T20 |
+| `npm run vaani:setup` | Create / update the Vaani agent from the prompt file |
+| `npm run google:token` | Get the Google Calendar refresh token |
 | `npm run db:migrate` | Create / update tables in Neon |
 | `npm run seed` | Seed the database from the eval results (dry run) |
 | `npm test` | Unit tests (decision rules, slot finder) |

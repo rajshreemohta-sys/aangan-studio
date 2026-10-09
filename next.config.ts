@@ -16,7 +16,7 @@ const nextConfig: NextConfig = {
   },
   // The classifier reads its prompt and the studio's rules from disk at runtime.
   outputFileTracingIncludes: {
-    "/**": ["./prompts/classifier.md", "./context/services.md", "./context/qualified.md", "./data/phone-transcripts.json"],
+    "/**": ["./prompts/classifier.md", "./prompts/vaani-agent.md", "./context/services.md", "./context/qualified.md", "./data/phone-transcripts.json"],
   },
 };
 

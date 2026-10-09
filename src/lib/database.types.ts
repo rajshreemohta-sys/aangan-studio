@@ -93,3 +93,22 @@ export type LeadRow = {
   summary: string | null;
   visit_type: string | null;
 };
+
+export type DispatchReason = "follow_up" | "dropped_call" | "web_enquiry";
+export type DispatchStatus = "queued" | "dialling" | "no_answer" | "rejected" | "failed" | "completed";
+
+export type DispatchRow = {
+  created_at: string;
+  email: string | null;
+  enquiry_at: string;
+  error: string | null;
+  id: string;
+  lead_id: string | null;
+  name: string | null;
+  notes: string | null;
+  phone: string;
+  reason: DispatchReason;
+  source_call_id: string | null;
+  status: DispatchStatus;
+  vaani_call_id: string | null;
+};

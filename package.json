@@ -12,7 +12,8 @@
     "seed": "tsx --env-file=.env.local scripts/seed.mts",
     "typecheck": "next typegen && tsc --noEmit",
     "db:migrate": "tsx --env-file=.env.local scripts/migrate.mts",
-    "google:token": "tsx --env-file=.env.local scripts/google-token.mts"
+    "google:token": "tsx --env-file=.env.local scripts/google-token.mts",
+    "vaani:setup": "tsx --env-file=.env.local scripts/vaani-setup.mts"
   },
   "dependencies": {
     "@google/genai": "^2.28.0",

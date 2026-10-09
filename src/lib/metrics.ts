@@ -169,16 +169,26 @@ export type DashboardMetrics = Awaited<ReturnType<typeof dashboardMetrics>>;
 export type LeadListItem = Pick<
   LeadRow,
   "id" | "call_id" | "outcome" | "reason_code" | "reason_detail" | "name" | "phone" | "email" | "locality" | "bhk" | "property_type" | "scope" | "follow_up_status" | "follow_up_reason" | "follow_up_note" | "follow_up_done_at" | "created_at"
-> & { started_at: string; after_hours: boolean; booking_starts_at: string | null; designer_name: string | null };
+> & {
+  started_at: string;
+  after_hours: boolean;
+  booking_starts_at: string | null;
+  designer_name: string | null;
+  dispatch_status: string | null;
+  dispatch_at: string | null;
+  dispatch_error: string | null;
+};
 
 const LEAD_LIST = `
   select l.id, l.call_id, l.outcome, l.reason_code, l.reason_detail, l.name, l.phone, l.email, l.locality, l.bhk,
          l.property_type, l.scope, l.follow_up_status, l.follow_up_reason, l.follow_up_note, l.follow_up_done_at, l.created_at,
-         c.started_at, c.after_hours, b.starts_at as booking_starts_at, d.name as designer_name
+         c.started_at, c.after_hours, b.starts_at as booking_starts_at, d.name as designer_name,
+         x.status as dispatch_status, x.created_at as dispatch_at, x.error as dispatch_error
   from leads l
   join calls c on c.id = l.call_id
   left join bookings b on b.lead_id = l.id and b.status <> 'cancelled'
-  left join designers d on d.id = b.designer_id`;
+  left join designers d on d.id = b.designer_id
+  left join lateral (select status, created_at, error from dispatches where lead_id = l.id order by created_at desc limit 1) x on true`;
 
 /** Open follow-ups first: escalations, then oldest first, so nothing waits behind newer calls. */
 export async function openFollowUps(limit = 50): Promise<LeadListItem[]> {

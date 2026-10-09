@@ -3,6 +3,7 @@ import { completeFollowUp, reopenFollowUp } from "@/app/dashboard/leads/actions"
 import type { Outcome } from "@/lib/classification";
 import { formatIst } from "@/lib/hours";
 import type { LeadListItem } from "@/lib/metrics";
+import { CallButton } from "./call-button";
 import { OutcomeChip } from "./ui";
 
 function since(d: string): string {
@@ -42,13 +43,16 @@ export function FollowUpList({ items, empty = "Nothing waiting. Every call has b
             </p>
             {l.follow_up_reason && <p className="text-sm mt-2 leading-relaxed">{l.follow_up_reason}</p>}
           </div>
-          <form action={completeFollowUp} className="flex gap-2 md:w-[340px] flex-none">
-            <input type="hidden" name="lead_id" value={l.id} />
-            <input name="note" className="input !py-2 text-sm" placeholder="What happened? (optional)" aria-label={`Note for ${l.name || "caller"}`} />
-            <button className="btn !py-2 whitespace-nowrap" type="submit">
-              Done
-            </button>
-          </form>
+          <div className="flex flex-col sm:flex-row gap-3 md:w-[480px] flex-none">
+            <CallButton leadId={l.id} hasPhone={!!l.phone} lastStatus={l.dispatch_status} lastAt={l.dispatch_at ? new Date(l.dispatch_at).toISOString() : null} />
+            <form action={completeFollowUp} className="flex gap-2 flex-1">
+              <input type="hidden" name="lead_id" value={l.id} />
+              <input name="note" className="input !py-2 text-sm" placeholder="What happened? (optional)" aria-label={`Note for ${l.name || "caller"}`} />
+              <button className="btn !py-2 whitespace-nowrap" type="submit">
+                Done
+              </button>
+            </form>
+          </div>
         </li>
       ))}
     </ul>

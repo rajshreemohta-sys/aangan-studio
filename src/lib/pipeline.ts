@@ -1,6 +1,6 @@
 import { classifyTranscript, type ClassifierResult } from "./classifier";
 import type { Classification, Outcome } from "./classification";
-import { softUncertainties } from "./classification";
+import { OUTCOME_LABELS, softUncertainties } from "./classification";
 import { appUrl, env, has, NotConfiguredError, numberEnv } from "./env";
 import { clientConfirmation, clientRejection, designerHandoff, escalationAlert } from "./emails";
 import { createEvent, freeBusy } from "./google-calendar";
@@ -8,7 +8,8 @@ import { isAfterHours } from "./hours";
 import { resendCostPerEmail, sendEmail, type Email } from "./resend";
 import { findSlot, parsePreference, type Slot } from "./slots";
 import { json, one, query } from "./db";
-import type { CallRow, DesignerRow } from "./database.types";
+import type { CallRow, DesignerRow, DispatchRow, LeadRow } from "./database.types";
+import { briefFromLead, dispatchCall, DispatchError } from "./dispatch";
 
 /**
  * After a call: classify → store → route by outcome → log every cost.
@@ -217,6 +218,30 @@ export async function processCall(callId: string, opts: PipelineOptions = {}): P
         if (!to) throw new NotConfiguredError("Missing environment variable: ESCALATION_EMAIL");
         return send(escalationAlert(c, { transcriptUrl, callerPhone: call.caller_phone, callStartedAt: startedAt }), to, "escalation alert");
       });
+    }
+
+    // ---- Vaani callbacks
+    if (!opts.dryRun) {
+      // A callback we placed about an earlier lead resolves that lead's follow-up.
+      const origin = call.vaani_call_id ? await one<DispatchRow>("select * from dispatches where vaani_call_id = $1", [call.vaani_call_id]) : null;
+      if (origin) await query("update dispatches set status = 'completed' where id = $1", [origin.id]);
+      if (origin?.lead_id && origin.lead_id !== leadId && c.outcome !== "INCOMPLETE") {
+        await query(
+          "update leads set follow_up_status = 'done', follow_up_note = $2, follow_up_done_at = now() where id = $1 and follow_up_status = 'open'",
+          [origin.lead_id, `Vaani called back — ${OUTCOME_LABELS[c.outcome].toLowerCase()} (see the newer call)`],
+        );
+        record("follow-up", "ok", "closed the earlier follow-up this callback was for");
+      }
+      // A dropped inbound call gets an automatic callback.
+      if (c.outcome === "INCOMPLETE" && call.direction === "inbound" && phone) {
+        try {
+          const saved = (await one<LeadRow>("select * from leads where id = $1", [leadId]))!;
+          const d = await dispatchCall({ reason: "dropped_call", phone, name: h.name || null, leadId, sourceCallId: callId, brief: briefFromLead(saved), automatic: true });
+          record("auto-callback", "ok", `Vaani is calling ${d.phone} back`);
+        } catch (e) {
+          record("auto-callback", e instanceof DispatchError ? "skipped" : "failed", e instanceof Error ? e.message : String(e));
+        }
+      }
     }
 
     // ---- follow-up queue on the dashboard

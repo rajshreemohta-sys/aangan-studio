@@ -102,3 +102,24 @@ create table if not exists costs (
   created_at timestamptz not null default now()
 );
 create index if not exists costs_created_at_idx on costs (created_at desc);
+
+-- Outbound calls Vaani makes for us: follow-up button, dropped-call callback, web enquiry.
+create table if not exists dispatches (
+  id uuid primary key default gen_random_uuid(),
+  reason text not null check (reason in ('follow_up', 'dropped_call', 'web_enquiry')),
+  phone text not null,
+  name text,
+  email text,
+  notes text,
+  -- the lead this callback is following up, if any
+  lead_id uuid references leads (id) on delete set null,
+  -- the inbound call that triggered an automatic callback, so each call triggers at most one
+  source_call_id uuid unique references calls (id) on delete set null,
+  vaani_call_id text unique,
+  status text not null default 'queued' check (status in ('queued', 'dialling', 'no_answer', 'rejected', 'failed', 'completed')),
+  error text,
+  enquiry_at timestamptz not null default now(),
+  created_at timestamptz not null default now()
+);
+create index if not exists dispatches_phone_idx on dispatches (phone, created_at desc);
+create index if not exists dispatches_lead_idx on dispatches (lead_id, created_at desc);
