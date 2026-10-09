@@ -1,7 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   cacheComponents: true,
   partialPrefetching: true,
   turbopack: {
@@ -11,6 +10,10 @@ const nextConfig: NextConfig = {
         as: "*.css",
       },
     },
+  },
+  // The classifier reads its prompt and the studio's rules from disk at runtime.
+  outputFileTracingIncludes: {
+    "/**": ["./prompts/classifier.md", "./context/services.md", "./context/qualified.md", "./data/phone-transcripts.json"],
   },
 };
 
