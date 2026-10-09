@@ -124,6 +124,10 @@ insert into designers (name, email, calendar_id) values
 
 How the app uses Vaani ([`src/lib/vaani.ts`](src/lib/vaani.ts), [docs](https://docs.vaanivoice.ai)):
 
+- **Browser voice calls (no phone number needed)** → [`/talk`](src/app/talk/page.tsx): a visitor taps *Talk to Vaani*, the server starts a Vaani WebRTC session, and the browser joins it with LiveKit. When the call ends, Vaani's webhook brings the transcript in like any other call (tagged "web call"). Limits: 5 sessions per visitor per hour, 40 in total.
+- **Phone features** (below) stay off until Vaani has a number: set `VAANI_TELEPHONY=on` to enable them.
+
+
 - **Inbound calls** → Vaani's `call_postprocessing` webhook carries the transcript; the caller's number comes from Vaani's call history.
 - **Outbound calls** (`POST /api/trigger-call/`), each with a callback brief passed as a per-call prompt override so Vaani doesn't re-ask what we know:
   - **Call with Vaani** button on every follow-up in the dashboard.

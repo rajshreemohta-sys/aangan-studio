@@ -42,6 +42,7 @@ export type FeedItem = {
   direction: string;
   source: string;
   status: string;
+  channel: string;
   name: string | null;
   locality: string | null;
   bhk: string | null;
@@ -60,6 +61,7 @@ type CallWithLead = {
   direction: string;
   source: string;
   status: string;
+  channel: string;
   name: string | null;
   locality: string | null;
   bhk: string | null;
@@ -70,7 +72,7 @@ type CallWithLead = {
 };
 
 const CALLS_WITH_LEADS = `
-  select c.id, c.started_at, c.enquiry_at, c.duration_seconds, c.after_hours, c.direction, c.source, c.status,
+  select c.id, c.started_at, c.enquiry_at, c.duration_seconds, c.after_hours, c.direction, c.source, c.status, c.channel,
          l.name, l.locality, l.bhk, l.outcome, l.reason_code, l.reason_detail, (b.id is not null) as booked
   from calls c
   left join leads l on l.call_id = c.id
@@ -84,6 +86,7 @@ const toFeed = (c: CallWithLead): FeedItem => ({
   direction: c.direction,
   source: c.source,
   status: c.status,
+  channel: c.channel,
   name: c.name || null,
   locality: c.locality || null,
   bhk: c.bhk || null,

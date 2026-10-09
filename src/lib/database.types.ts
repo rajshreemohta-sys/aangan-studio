@@ -17,6 +17,7 @@ export type BookingRow = {
 export type CallRow = {
   after_hours: boolean;
   caller_phone: string | null;
+  channel: "phone" | "web";
   created_at: string;
   direction: string;
   duration_seconds: number;

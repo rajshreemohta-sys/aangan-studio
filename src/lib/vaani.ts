@@ -215,3 +215,41 @@ export async function updateDeployment(agentId: string, number: string): Promise
     body: JSON.stringify({ deployment: { phone: { call_type: { Inbound: number, Outbound: [number] } } } }),
   });
 }
+
+// ---------- browser voice sessions (no phone line) ----------
+
+/** Phone calls (inbound number, callbacks) need a number in Vaani; browser voice doesn't. */
+export const telephonyEnabled = () => env("VAANI_TELEPHONY") === "on";
+
+const WEB_NOTE = [
+  "## This conversation is a voice call from the Aangan Studio website",
+  "",
+  "The person is talking to you through their browser, not a phone, so you do NOT have their number.",
+  "Ask for their mobile number early, and read it back digit by digit to confirm.",
+  "If the connection is poor, ask them to move closer to their microphone.",
+  "",
+  "---",
+  "",
+].join("\n");
+
+export type WebSession = { token: string; url: string; roomName: string };
+
+export async function startWebSession(language: "en" | "hi" | "mr"): Promise<WebSession> {
+  const r = await vaani<{ token?: string; connection_url?: string; room_name?: string; error?: string; detail?: unknown }>("/api/trigger-call/", {
+    method: "POST",
+    body: JSON.stringify({
+      agent_id: requireEnv("VAANI_AGENT_ID"),
+      medium: "webrtc",
+      primary_language: language,
+      secondary_language: language === "en" ? "hi" : "en",
+      voice_gender: "female",
+      welcome_message: INBOUND_GREETING,
+      welcome_interruptible: true,
+      modify_agent: {
+        persona: { identity: { system_prompt: WEB_NOTE + agentPrompt().replace(/^On an inbound call your greeting.*$/m, "Your greeting has already been spoken. Continue from the person's answer.") } },
+      },
+    }),
+  });
+  if (!r.token || !r.connection_url || !r.room_name) throw new Error(`Vaani didn't start the session: ${r.error ?? JSON.stringify(r.detail ?? r).slice(0, 200)}`);
+  return { token: r.token, url: r.connection_url, roomName: r.room_name };
+}

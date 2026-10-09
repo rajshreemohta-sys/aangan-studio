@@ -1,7 +1,7 @@
 import type { DispatchReason, DispatchRow, LeadRow } from "./database.types";
 import { one, query } from "./db";
 import { has } from "./env";
-import { triggerCall, type CallbackBrief } from "./vaani";
+import { telephonyEnabled, triggerCall, type CallbackBrief } from "./vaani";
 
 /**
  * Outbound calls Vaani makes for us. Guards keep a bug or a spammed form from
@@ -41,6 +41,7 @@ export type DispatchInput = {
 
 export async function dispatchCall(input: DispatchInput): Promise<DispatchRow> {
   if (!has("VAANI_API_KEY", "VAANI_AGENT_ID")) throw new DispatchError("Vaani isn't connected yet (VAANI_API_KEY / VAANI_AGENT_ID missing).");
+  if (!telephonyEnabled()) throw new DispatchError("Phone calls are off — Vaani has no phone number yet (set VAANI_TELEPHONY=on once it does).");
   const phone = normalisePhone(input.phone);
   if (!phone) throw new DispatchError(`"${input.phone}" isn't a phone number Vaani can dial.`);
 

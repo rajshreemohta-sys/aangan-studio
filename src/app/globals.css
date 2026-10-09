@@ -255,7 +255,29 @@ a:focus-visible {
   }
 }
 
+/* speaking indicator on the voice call button */
+.voice-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  animation: voice-pulse 1.2s ease-out infinite;
+}
+@keyframes voice-pulse {
+  from {
+    transform: scale(0.85);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.25);
+    opacity: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .voice-ring {
+    animation: none;
+    transform: scale(1.1);
+  }
   .blob,
   .fade-up,
   .slide-in,

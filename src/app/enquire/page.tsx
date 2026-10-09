@@ -1,9 +1,23 @@
+import Link from "next/link";
+import { telephonyEnabled } from "@/lib/vaani";
 import { EnquiryForm } from "./enquiry-form";
 
 export const metadata = { title: "Enquire · Aangan Studio", description: "Tell us about your home — Vaani will call you back in a couple of minutes." };
 
-/** A ready-made enquiry form: submitting it makes Vaani call the person back. */
+/** Callback form: submitting it makes Vaani phone the person. Needs a phone number in Vaani; otherwise people talk to Vaani in the browser at /talk. */
 export default function EnquirePage() {
+  if (!telephonyEnabled())
+    return (
+      <main className="min-h-screen flex items-center justify-center px-4">
+        <div className="text-center">
+          <h1 className="display text-5xl">Talk to us now.</h1>
+          <p className="text-muted mt-3">Vaani, our assistant, can take your enquiry by voice, right in your browser.</p>
+          <Link href="/talk" className="btn mt-6">
+            Talk to Vaani →
+          </Link>
+        </div>
+      </main>
+    );
   return (
     <main className="min-h-screen flex items-center justify-center px-4 py-16">
       <div className="w-full max-w-lg">

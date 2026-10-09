@@ -123,3 +123,15 @@ create table if not exists dispatches (
 );
 create index if not exists dispatches_phone_idx on dispatches (phone, created_at desc);
 create index if not exists dispatches_lead_idx on dispatches (lead_id, created_at desc);
+
+-- Browser voice sessions with Vaani (no phone line). Used for rate limits and to tag web calls.
+create table if not exists voice_sessions (
+  id uuid primary key default gen_random_uuid(),
+  room_name text not null unique,
+  ip_hash text,
+  created_at timestamptz not null default now()
+);
+create index if not exists voice_sessions_created_idx on voice_sessions (created_at desc);
+create index if not exists voice_sessions_ip_idx on voice_sessions (ip_hash, created_at desc);
+
+alter table calls add column if not exists channel text not null default 'phone';

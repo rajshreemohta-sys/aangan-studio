@@ -121,7 +121,7 @@ export function LiveFeed({ initial }: { initial: FeedItem[] }) {
               </p>
               <p className="text-xs text-muted mt-0.5 truncate">
                 {ago(i.startedAt)} · {Math.round(i.durationSeconds / 60)} min{i.afterHours ? " · after hours" : ""}
-                {i.direction === "outbound" ? " · callback" : ""}
+                {i.channel === "web" ? " · web call" : i.direction === "outbound" ? " · callback" : ""}
                 {i.outcome && i.outcome !== "QUALIFIED" && i.reasonCode ? ` · ${REASON_LABELS[i.reasonCode]}` : ""}
                 {i.booked ? " · booked" : ""}
               </p>

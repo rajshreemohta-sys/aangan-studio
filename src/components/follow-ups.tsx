@@ -5,6 +5,7 @@ import { formatIst } from "@/lib/hours";
 import type { LeadListItem } from "@/lib/metrics";
 import { CallButton } from "./call-button";
 import { OutcomeChip } from "./ui";
+import { telephonyEnabled } from "@/lib/vaani";
 
 function since(d: string): string {
   const h = (Date.now() - new Date(d).getTime()) / 3_600_000;
@@ -16,6 +17,7 @@ function since(d: string): string {
 /** The front desk's to-do list: every call a person still has to act on. */
 export function FollowUpList({ items, empty = "Nothing waiting. Every call has been handled." }: { items: LeadListItem[]; empty?: string }) {
   if (!items.length) return <p className="p-6 text-muted text-sm">{empty}</p>;
+  const canCall = telephonyEnabled();
   return (
     <ul className="divide-y divide-line">
       {items.map((l) => (
@@ -44,7 +46,7 @@ export function FollowUpList({ items, empty = "Nothing waiting. Every call has b
             {l.follow_up_reason && <p className="text-sm mt-2 leading-relaxed">{l.follow_up_reason}</p>}
           </div>
           <div className="flex flex-col sm:flex-row gap-3 md:w-[480px] flex-none">
-            <CallButton leadId={l.id} hasPhone={!!l.phone} lastStatus={l.dispatch_status} lastAt={l.dispatch_at ? new Date(l.dispatch_at).toISOString() : null} />
+            {canCall && <CallButton leadId={l.id} hasPhone={!!l.phone} lastStatus={l.dispatch_status} lastAt={l.dispatch_at ? new Date(l.dispatch_at).toISOString() : null} />}
             <form action={completeFollowUp} className="flex gap-2 flex-1">
               <input type="hidden" name="lead_id" value={l.id} />
               <input name="note" className="input !py-2 text-sm" placeholder="What happened? (optional)" aria-label={`Note for ${l.name || "caller"}`} />

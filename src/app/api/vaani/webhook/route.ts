@@ -31,6 +31,8 @@ export async function POST(req: Request) {
 
   // A call we placed? Then we already know the number and when the enquiry came in.
   const dispatch = await one<DispatchRow>("select * from dispatches where vaani_call_id = $1", [event.callId]);
+  // A browser voice call from the /talk page?
+  const isWeb = !!(await one<{ id: string }>("select id from voice_sessions where room_name = $1", [event.callId])) || event.callId.startsWith("webrtc-");
   let phone = dispatch?.phone ?? null;
   let startedAt = new Date(event.finishedAt.getTime() - event.durationSeconds * 1000);
   let direction: "inbound" | "outbound" = dispatch || event.callId.startsWith("outbound-") ? "outbound" : "inbound";
@@ -40,7 +42,7 @@ export async function POST(req: Request) {
     const h = await findHistoryCall(event.callId);
     if (h) {
       direction = /out/i.test(h.direction ?? h.call_type ?? "") ? "outbound" : direction;
-      phone ??= (direction === "outbound" ? h.to_number : h.from_number) ?? null;
+      if (!isWeb) phone ??= (direction === "outbound" ? h.to_number : h.from_number) ?? null;
       startedAt = parseVaaniTime(h.Start_time) ?? startedAt;
     }
   } catch (e) {
@@ -59,6 +61,7 @@ export async function POST(req: Request) {
     enquiryAt: dispatch ? new Date(dispatch.enquiry_at) : startedAt,
     recordingUrl: event.recordingUrl,
     rawPayload: JSON.parse(raw),
+    channel: isWeb ? "web" : "phone",
   });
   if (duplicate) return Response.json({ ok: true, callId: id, duplicate: true });
 

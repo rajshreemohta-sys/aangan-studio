@@ -10,6 +10,7 @@ import { findSlot, parsePreference, type Slot } from "./slots";
 import { json, one, query } from "./db";
 import type { CallRow, DesignerRow, DispatchRow, LeadRow } from "./database.types";
 import { briefFromLead, dispatchCall, DispatchError } from "./dispatch";
+import { telephonyEnabled } from "./vaani";
 
 /**
  * After a call: classify → store → route by outcome → log every cost.
@@ -34,6 +35,7 @@ export type CallInput = {
   escalationFlag?: boolean;
   recordingUrl?: string | null;
   rawPayload?: unknown;
+  channel?: "phone" | "web";
 };
 
 export type PipelineOptions = {
@@ -51,8 +53,8 @@ export async function insertCall(input: CallInput): Promise<{ id: string; duplic
   }
   const row = await one<{ id: string }>(
     `insert into calls (vaani_call_id, source, direction, caller_phone, raw_transcript, summary, duration_seconds,
-       started_at, enquiry_at, after_hours, escalation_flag, recording_url, raw_payload, created_at)
-     values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13::jsonb,$8)
+       started_at, enquiry_at, after_hours, escalation_flag, recording_url, raw_payload, created_at, channel)
+     values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13::jsonb,$8,$14)
      on conflict (vaani_call_id) do nothing
      returning id`,
     [
@@ -69,6 +71,7 @@ export async function insertCall(input: CallInput): Promise<{ id: string; duplic
       input.escalationFlag ?? false,
       input.recordingUrl ?? null,
       json(input.rawPayload ?? null),
+      input.channel ?? "phone",
     ],
   );
   if (!row) {
@@ -233,7 +236,7 @@ export async function processCall(callId: string, opts: PipelineOptions = {}): P
         record("follow-up", "ok", "closed the earlier follow-up this callback was for");
       }
       // A dropped inbound call gets an automatic callback.
-      if (c.outcome === "INCOMPLETE" && call.direction === "inbound" && phone) {
+      if (c.outcome === "INCOMPLETE" && call.direction === "inbound" && phone && telephonyEnabled()) {
         try {
           const saved = (await one<LeadRow>("select * from leads where id = $1", [leadId]))!;
           const d = await dispatchCall({ reason: "dropped_call", phone, name: h.name || null, leadId, sourceCallId: callId, brief: briefFromLead(saved), automatic: true });
