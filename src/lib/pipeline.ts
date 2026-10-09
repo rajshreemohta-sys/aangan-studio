@@ -217,7 +217,7 @@ export async function processCall(callId: string, opts: PipelineOptions = {}): P
 
     if (c.outcome === "ESCALATED") {
       await attempt("email:escalation", async () => {
-        const to = env("ESCALATION_EMAIL");
+        const to = env("ESCALATION_EMAIL") ?? env("DEMO_INBOX");
         if (!to) throw new NotConfiguredError("Missing environment variable: ESCALATION_EMAIL");
         return send(escalationAlert(c, { transcriptUrl, callerPhone: call.caller_phone, callStartedAt: startedAt }), to, "escalation alert");
       });
