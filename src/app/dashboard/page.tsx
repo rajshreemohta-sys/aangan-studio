@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { connection } from "next/server";
 import { Suspense } from "react";
 import { CountUp, Donut, LiveFeed } from "@/components/motion";
 import { inr, Nav, OUTCOME_COLORS, SectionHead, Window } from "@/components/ui";
@@ -97,6 +98,7 @@ const SOURCE_LABELS: Record<string, string> = { vaani: "Vaani voice minutes", ge
 
 async function Dashboard({ searchParams }: { searchParams: PageProps<"/dashboard">["searchParams"] }) {
   const sp = await searchParams;
+  await connection();
   const range = (typeof sp.range === "string" && sp.range in RANGES ? sp.range : "all") as RangeKey;
   const m = await dashboardMetrics(range);
   const resp = formatDuration(m.medianFirstResponseSeconds);

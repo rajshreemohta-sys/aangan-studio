@@ -11,6 +11,9 @@ const nextConfig: NextConfig = {
       },
     },
   },
+  async redirects() {
+    return [{ source: "/", destination: "/dashboard", permanent: false }];
+  },
   // The classifier reads its prompt and the studio's rules from disk at runtime.
   outputFileTracingIncludes: {
     "/**": ["./prompts/classifier.md", "./context/services.md", "./context/qualified.md", "./data/phone-transcripts.json"],

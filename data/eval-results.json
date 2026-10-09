@@ -9,60 +9,60 @@
       "category": "ENQUIRY",
       "outcome": "QUALIFIED",
       "reason_code": "QUALIFIED",
-      "reason_detail": "All criteria met for full 3BHK redesign and execution in Kothrud.",
+      "reason_detail": "Full 3BHK redesign in Kothrud within Pune, flexible timeline through March 2027.",
       "criteria": [
         {
           "id": "project",
           "verdict": "pass",
           "evidence": "We want to redo the whole thing — kitchen, living room, both bedrooms.",
-          "note": "Full residential redesign and execution for a 3BHK flat."
+          "note": "Full residential redesign and execution for a 1,400 sq ft 3BHK apartment."
         },
         {
           "id": "location",
           "verdict": "pass",
-          "evidence": "We have a 3BHK in Kothrud — Dahanukar Colony.",
-          "note": "Kothrud is within the Pune service area."
+          "evidence": "Kothrud — Dahanukar Colony",
+          "note": "Kothrud is a core locality in Pune city."
         },
         {
           "id": "timeline",
           "verdict": "pass",
           "evidence": "We’d like to be done by March. We’re in no rush.",
-          "note": "March 2027 completion gives around 6 months lead time (well above 8 weeks)."
+          "note": "Target completion by March 2027 is ~6 months away, well beyond the 8-week minimum lead time."
         },
         {
           "id": "budget",
           "verdict": "pass",
           "evidence": "not mentioned",
-          "note": "Budget was not volunteered, treated as pass."
+          "note": "Budget was not discussed; treated as pass."
         },
         {
           "id": "decision_maker",
           "verdict": "pass",
-          "evidence": "Yes — myself and my husband. He knows we’re calling and is happy to go ahead.",
+          "evidence": "myself and my husband. He knows we’re calling and is happy to go ahead.",
           "note": "Caller is co-owner and authorised decision-maker."
         }
       ],
-      "confidence": 1,
+      "confidence": 0.98,
       "handoff": {
         "name": "Priya",
         "phone": "",
         "email": "",
-        "locality": "Dahanukar Colony, Kothrud",
-        "property_type": "Apartment",
+        "locality": "Kothrud — Dahanukar Colony",
+        "property_type": "flat",
         "bhk": "3BHK",
         "carpet_area": "1,400 sq ft",
         "scope": "redo the whole thing — kitchen, living room, both bedrooms",
         "execution_or_advice": "execution",
         "completion_date": "March 2027",
-        "ownership": "Owned",
-        "decision_maker": "Priya and husband",
+        "ownership": "owned",
+        "decision_maker": "Priya and her husband",
         "budget_volunteered": "",
         "consultation_preference": "",
         "visit_type": "",
-        "source": "Referral from Shruti Joshi"
+        "source": "Referred by friend Shruti Joshi (client from Aundh)"
       },
       "flags": [
-        "Referred by existing client Shruti Joshi (Aundh project)"
+        "Referral from previous client Shruti Joshi (Aundh flat)"
       ],
       "missing_fields": [
         "phone",
@@ -72,7 +72,7 @@
       ],
       "clarifying_question": "",
       "client_reason": "",
-      "summary": "Priya called looking to redesign a 1,400 sq ft 3BHK in Dahanukar Colony, Kothrud (referred by Shruti Joshi).\nFull home interior redesign and execution requested, targeted completion by March 2027.\nOutcome: QUALIFIED — all core criteria met for residential design and execution.",
+      "summary": "Priya called inquiring for a complete 3BHK redesign in Kothrud (Dahanukar Colony).\n1,400 sq ft owned apartment, target completion March 2027, referred by existing client Shruti Joshi.\nOutcome: QUALIFIED — valid scope, location, timeline, and decision-maker status.",
       "language": "English"
     },
     "decision": {
@@ -82,9 +82,9 @@
     "modelOutcome": "QUALIFIED",
     "usage": {
       "model": "gemini-3.6-flash",
-      "inputTokens": 3605,
-      "outputTokens": 2178,
-      "costInr": 0.547505
+      "inputTokens": 3679,
+      "outputTokens": 2600,
+      "costInr": 0.637975
     }
   },
   {
@@ -97,37 +97,37 @@
       "category": "ENQUIRY",
       "outcome": "QUALIFIED",
       "reason_code": "QUALIFIED",
-      "reason_detail": "2BHK full redesign in Wakad",
+      "reason_detail": "Qualified enquiry for 2BHK full redesign in Wakad",
       "criteria": [
         {
           "id": "project",
           "verdict": "pass",
           "evidence": "Full redesign — modular kitchen, wardrobes, living room, both bedrooms. About 950 sq ft.",
-          "note": "Full residential redesign with execution requested for a 950 sq ft 2BHK."
+          "note": "Full residential redesign with design and execution."
         },
         {
           "id": "location",
           "verdict": "pass",
           "evidence": "I have a 2BHK in Wakad",
-          "note": "Wakad is within the Pune/PCMC service area."
+          "note": "Wakad is within the PCMC/Pune service area."
         },
         {
           "id": "timeline",
           "verdict": "pass",
           "evidence": "We move in November — so maybe starting design from October?",
-          "note": "Timeline allows sufficient lead time for design starting in October."
+          "note": "Move-in date in November is more than 8 weeks from call date (Sept 3)."
         },
         {
           "id": "budget",
           "verdict": "pass",
           "evidence": "not mentioned",
-          "note": "Caller asked for pricing but did not volunteer a specific budget figure."
+          "note": "Budget was not volunteered by the caller."
         },
         {
           "id": "decision_maker",
           "verdict": "pass",
-          "evidence": "I have a 2BHK in Wakad",
-          "note": "Caller is the homeowner and decision-maker."
+          "evidence": "We move in November",
+          "note": "Caller speaks as owner and decision-maker."
         }
       ],
       "confidence": 0.95,
@@ -136,33 +136,32 @@
         "phone": "",
         "email": "",
         "locality": "Wakad",
-        "property_type": "Apartment",
+        "property_type": "apartment",
         "bhk": "2BHK",
         "carpet_area": "950 sq ft",
         "scope": "Full redesign — modular kitchen, wardrobes, living room, both bedrooms",
         "execution_or_advice": "execution",
         "completion_date": "November 2026",
-        "ownership": "",
-        "decision_maker": "Caller",
+        "ownership": "owner",
+        "decision_maker": "caller",
         "budget_volunteered": "",
         "consultation_preference": "",
         "visit_type": "",
         "source": "Instagram"
       },
       "flags": [
-        "Caller asked for price ballpark/range twice; agent deflected and explained free consultation process."
+        "Caller repeatedly asked for rough ballpark pricing, which was deflected by agent."
       ],
       "missing_fields": [
         "name",
         "phone",
         "email",
-        "ownership",
         "consultation_preference",
         "visit_type"
       ],
       "clarifying_question": "",
       "client_reason": "",
-      "summary": "Enquiry for a 950 sq ft 2BHK in Wakad found via Instagram.\nRequires full redesign of kitchen, wardrobes, living room, and bedrooms for November move-in.\nQualified lead who agreed to book consultation after pricing deflection.",
+      "summary": "Caller inquiring for 2BHK full redesign in Wakad (950 sq ft).\nDesign start planned for October 2026, moving in November 2026; found studio via Instagram.\nQualified enquiry; caller agreed to book consultation after pricing request was deflected.",
       "language": "English"
     },
     "decision": {
@@ -172,9 +171,9 @@
     "modelOutcome": "QUALIFIED",
     "usage": {
       "model": "gemini-3.6-flash",
-      "inputTokens": 3620,
-      "outputTokens": 2216,
-      "costInr": 0.55586
+      "inputTokens": 3694,
+      "outputTokens": 2877,
+      "costInr": 0.69652
     }
   },
   {
@@ -187,25 +186,25 @@
       "category": "ENQUIRY",
       "outcome": "REJECTED",
       "reason_code": "LOCATION",
-      "reason_detail": "site in Nashik",
+      "reason_detail": "site in Nashik (outside service area)",
       "criteria": [
         {
           "id": "project",
           "verdict": "pass",
           "evidence": "I want to redo my home office and study.",
-          "note": "Redo of home office and study is within project scope."
+          "note": "Redesigning a home office and study implies full execution scope."
         },
         {
           "id": "location",
           "verdict": "fail",
-          "evidence": "I’m in Nashik — would you be able to take on a project here?",
-          "note": "Site is in Nashik, which is outside Pune and PCMC service area."
+          "evidence": "I’m in Nashik",
+          "note": "Nashik is outside our service area of Pune city and PCMC."
         },
         {
           "id": "timeline",
           "verdict": "unclear",
           "evidence": "not mentioned",
-          "note": "Timeline was not mentioned on the call."
+          "note": "No timeline or completion date was mentioned."
         },
         {
           "id": "budget",
@@ -216,8 +215,8 @@
         {
           "id": "decision_maker",
           "verdict": "pass",
-          "evidence": "My name is Suresh Patil. I’m in Nashik... I want to redo my home office and study.",
-          "note": "Caller is the decision-maker for his property."
+          "evidence": "I want to redo my home office and study.",
+          "note": "Caller is contacting for his own home space."
         }
       ],
       "confidence": 1,
@@ -226,10 +225,10 @@
         "phone": "",
         "email": "",
         "locality": "Nashik",
-        "property_type": "Residential",
+        "property_type": "Home office / study",
         "bhk": "",
         "carpet_area": "",
-        "scope": "redo my home office and study",
+        "scope": "redo home office and study",
         "execution_or_advice": "execution",
         "completion_date": "",
         "ownership": "",
@@ -251,8 +250,8 @@
         "visit_type"
       ],
       "clarifying_question": "",
-      "client_reason": "We currently work only within Pune and PCMC, where our contractor network is based.",
-      "summary": "Suresh Patil called regarding a home office and study redo in Nashik.\nDiscovered studio on LinkedIn; timeline and budget were not discussed.\nRejected because project location is in Nashik, outside our Pune and PCMC service area.",
+      "client_reason": "We currently work only within Pune and PCMC, as our execution team and contractor network are based locally.",
+      "summary": "Suresh Patil called inquiring about redoing his home office and study in Nashik.\nFound studio via LinkedIn; no timeline or budget discussed.\nRejected because the project location is in Nashik, outside Pune and PCMC.",
       "language": "English"
     },
     "decision": {
@@ -262,9 +261,9 @@
     "modelOutcome": "REJECTED",
     "usage": {
       "model": "gemini-3.6-flash",
-      "inputTokens": 3517,
-      "outputTokens": 2016,
-      "costInr": 0.511285
+      "inputTokens": 3591,
+      "outputTokens": 1619,
+      "costInr": 0.429765
     }
   },
   {
@@ -277,50 +276,50 @@
       "category": "ENQUIRY",
       "outcome": "REJECTED",
       "reason_code": "SCOPE",
-      "reason_detail": "advice and layout suggestions only — no execution planned",
+      "reason_detail": "advice and decor suggestions only — no execution",
       "criteria": [
         {
           "id": "project",
           "verdict": "fail",
-          "evidence": "can someone come and give us some ideas for our living room? We’re not planning to do the full thing right now.",
-          "note": "Caller wants color suggestions and furniture layout ideas without execution."
+          "evidence": "can someone come and give us some ideas for our living room? We’re not planning to do the full thing right now. Just want suggestions on colours, furniture arrangement, what to change.",
+          "note": "Caller is seeking design advice, colour suggestions, and furniture arrangement without execution."
         },
         {
           "id": "location",
           "verdict": "unclear",
           "evidence": "not mentioned",
-          "note": "Location was not mentioned in the call."
+          "note": "Location was not mentioned during the call."
         },
         {
           "id": "timeline",
           "verdict": "unclear",
           "evidence": "not mentioned",
-          "note": "No timeline discussed."
+          "note": "Timeline was not specified beyond 'just exploring for now'."
         },
         {
           "id": "budget",
           "verdict": "pass",
           "evidence": "not mentioned",
-          "note": "Budget was not volunteered."
+          "note": "Budget was not discussed."
         },
         {
           "id": "decision_maker",
           "verdict": "pass",
           "evidence": "give us some ideas for our living room",
-          "note": "Caller is inquiring for their own living room."
+          "note": "Caller appears to be the homeowner/decision maker, but project fails on scope."
         }
       ],
-      "confidence": 0.98,
+      "confidence": 1,
       "handoff": {
         "name": "",
         "phone": "",
         "email": "",
         "locality": "",
-        "property_type": "residential",
+        "property_type": "living room",
         "bhk": "",
         "carpet_area": "",
-        "scope": "living room styling ideas, colors, and furniture arrangement",
-        "execution_or_advice": "advice only",
+        "scope": "ideas, colour suggestions, and furniture arrangement for living room",
+        "execution_or_advice": "advice",
         "completion_date": "",
         "ownership": "",
         "decision_maker": "",
@@ -329,13 +328,14 @@
         "visit_type": "",
         "source": ""
       },
-      "flags": [],
+      "flags": [
+        "Caller requested design advice and furniture arrangement suggestions only."
+      ],
       "missing_fields": [
         "name",
         "phone",
         "email",
         "locality",
-        "property_type",
         "bhk",
         "carpet_area",
         "completion_date",
@@ -346,8 +346,8 @@
         "source"
       ],
       "clarifying_question": "",
-      "client_reason": "We focus exclusively on complete interior design and execution projects rather than standalone design advice or styling. Should you decide to go ahead with a full redesign in the future, we would be delighted to assist you.",
-      "summary": "Caller inquiring about design ideas for their living room.\nSeeking advice on colors and furniture layout with no execution planned.\nRejected due to scope (advisory only, no execution).",
+      "client_reason": "We specialize in end-to-end interior design and execution projects rather than standalone design advisory or styling consultations. Please feel free to reach out if you decide to go ahead with a complete redesign and execution in the future.",
+      "summary": "Enquiry for living room decor ideas and furniture arrangement.\nCaller seeks design suggestions only with no execution or full project planned.\nREJECTED — project scope is advisory only.",
       "language": "English"
     },
     "decision": {
@@ -357,9 +357,9 @@
     "modelOutcome": "REJECTED",
     "usage": {
       "model": "gemini-3.6-flash",
-      "inputTokens": 3527,
-      "outputTokens": 2475,
-      "costInr": 0.607925
+      "inputTokens": 3601,
+      "outputTokens": 1983,
+      "costInr": 0.506455
     }
   },
   {
@@ -372,37 +372,37 @@
       "category": "ENQUIRY",
       "outcome": "QUALIFIED",
       "reason_code": "QUALIFIED",
-      "reason_detail": "qualified enquiry for 4BHK full redesign in Koregaon Park",
+      "reason_detail": "Qualified 4BHK full redesign enquiry in Koregaon Park with execution and ~5 month timeline.",
       "criteria": [
         {
           "id": "project",
           "verdict": "pass",
-          "evidence": "4BHK in Koregaon Park — about 2,400 sq ft carpet. Complete redesign. New flooring, kitchen, all four bedrooms. We’ve already moved out temporarily.",
-          "note": "Full residential redesign with execution required for a 2,400 sq ft 4BHK."
+          "evidence": "We have a 4BHK in Koregaon Park — about 2,400 sq ft carpet. Complete redesign. New flooring, kitchen, all four bedrooms. We’ve already moved out temporarily.",
+          "note": "Full residential redesign with execution for a 4BHK apartment."
         },
         {
           "id": "location",
           "verdict": "pass",
           "evidence": "Koregaon Park",
-          "note": "Site is in Koregaon Park, Pune."
+          "note": "Koregaon Park is a prime locality in Pune city."
         },
         {
           "id": "timeline",
           "verdict": "pass",
           "evidence": "We want to move back in by February. About 4 months.",
-          "note": "Completion timeline of 4 months is well beyond the 8-week minimum."
+          "note": "Target completion in Feb 2027 (~5 months away), well beyond 8 weeks."
         },
         {
           "id": "budget",
           "verdict": "pass",
           "evidence": "not mentioned",
-          "note": "Budget was not explicitly discussed or volunteered."
+          "note": "Budget not mentioned, treated as pass."
         },
         {
           "id": "decision_maker",
           "verdict": "pass",
           "evidence": "We have a 4BHK in Koregaon Park",
-          "note": "Caller represents the homeowner household and has authority to proceed."
+          "note": "Caller represents the home-owning household."
         }
       ],
       "confidence": 0.95,
@@ -417,25 +417,24 @@
         "scope": "Complete redesign including new flooring, kitchen, and all four bedrooms",
         "execution_or_advice": "execution",
         "completion_date": "February 2027",
-        "ownership": "",
+        "ownership": "owned",
         "decision_maker": "Aarti Mehta",
         "budget_volunteered": "",
         "consultation_preference": "site visit",
         "visit_type": "site_visit",
-        "source": "referral (Vikram Agarwal)"
+        "source": "Referral (Vikram Agarwal, friend of Nikhil)"
       },
       "flags": [
-        "Referred by Vikram Agarwal (friend of Nikhil)",
-        "Family has already moved out temporarily for work to begin"
+        "Referred by Vikram Agarwal (close friend of Nikhil)",
+        "Client has already temporarily moved out of the property"
       ],
       "missing_fields": [
         "phone",
-        "email",
-        "ownership"
+        "email"
       ],
       "clarifying_question": "",
       "client_reason": "",
-      "summary": "Aarti Mehta calling regarding a 4BHK (2,400 sq ft) complete redesign in Koregaon Park.\nClient already moved out; needs completion by February (~4 months). Referred by Nikhil's friend Vikram Agarwal.\nQualified enquiry — requested site visit consultation for early next week.",
+      "summary": "Aarti Mehta calling regarding a 4BHK (2,400 sq ft carpet) complete redesign in Koregaon Park.\nFull home execution with family temporarily moved out; target completion by February 2027.\nQualified lead referred by Vikram Agarwal; requested a site visit consultation for early next week.",
       "language": "English"
     },
     "decision": {
@@ -445,9 +444,9 @@
     "modelOutcome": "QUALIFIED",
     "usage": {
       "model": "gemini-3.6-flash",
-      "inputTokens": 3556,
-      "outputTokens": 1955,
-      "costInr": 0.49945
+      "inputTokens": 3630,
+      "outputTokens": 1939,
+      "costInr": 0.49794
     }
   },
   {
@@ -460,59 +459,61 @@
       "category": "ENQUIRY",
       "outcome": "QUALIFIED",
       "reason_code": "QUALIFIED",
-      "reason_detail": "Qualified commercial fitout project in Baner within timeline and size limits.",
+      "reason_detail": "Qualified commercial office fitout enquiry in Baner with founder decision-maker and >8 week timeline.",
       "criteria": [
         {
           "id": "project",
           "verdict": "pass",
-          "evidence": "We need workstations for 20 people, a small cabin, a meeting room, and a break area.",
-          "note": "Commercial office fitout (800 sq ft) well within the 3,000 sq ft threshold with complete fitout/execution required."
+          "evidence": "About 800 sq ft. We need workstations for 20 people, a small cabin, a meeting room, and a break area.",
+          "note": "Commercial office fitout under 3,000 sq ft requiring full design and execution from bare shell."
         },
         {
           "id": "location",
           "verdict": "pass",
-          "evidence": "first proper office space in Baner",
-          "note": "Baner is a key area within Pune city."
+          "evidence": "office space in Baner",
+          "note": "Baner is a key locality in Pune city."
         },
         {
           "id": "timeline",
           "verdict": "pass",
           "evidence": "We want to be operational by December.",
-          "note": "December 2026 is approximately 12–16 weeks away from the call date of September 5, 2026, well beyond the 8-week minimum lead time."
+          "note": "Completion targeted for December 2026, approx 12-16 weeks out (>8 weeks requirement)."
         },
         {
           "id": "budget",
           "verdict": "pass",
           "evidence": "not mentioned",
-          "note": "Budget was not discussed or volunteered."
+          "note": "Budget was not volunteered or discussed, auto-pass."
         },
         {
           "id": "decision_maker",
           "verdict": "pass",
           "evidence": "Yes, I’m the founder.",
-          "note": "Caller is the company founder and decision maker."
+          "note": "Caller is the primary decision-maker."
         }
       ],
-      "confidence": 0.95,
+      "confidence": 0.98,
       "handoff": {
         "name": "",
         "phone": "",
         "email": "",
         "locality": "Baner",
-        "property_type": "office",
+        "property_type": "commercial office",
         "bhk": "",
         "carpet_area": "800 sq ft",
-        "scope": "workstations for 20 people, a small cabin, a meeting room, and a break area",
+        "scope": "Full fitout from bare shell: 20 workstations, small cabin, meeting room, break area",
         "execution_or_advice": "execution",
         "completion_date": "December 2026",
         "ownership": "",
-        "decision_maker": "caller (founder)",
+        "decision_maker": "Founder",
         "budget_volunteered": "",
         "consultation_preference": "",
         "visit_type": "",
         "source": ""
       },
-      "flags": [],
+      "flags": [
+        "Commercial project — 800 sq ft bare shell startup office"
+      ],
       "missing_fields": [
         "name",
         "phone",
@@ -524,7 +525,7 @@
       ],
       "clarifying_question": "",
       "client_reason": "",
-      "summary": "Caller seeking full commercial office fitout for an 800 sq ft bare shell in Baner.\nNeeds 20 workstations, cabin, meeting room, break area; target completion December 2026.\nQUALIFIED — Founder calling, timeline is >12 weeks out, project fits size and service area criteria.",
+      "summary": "Founder calling for 800 sq ft commercial office fitout in Baner.\nBare shell space requiring 20 workstations, cabin, meeting room, break area; needed by December 2026.\nOutcome: QUALIFIED — Passes all scope, location, timeline, and decision-maker criteria.",
       "language": "English"
     },
     "decision": {
@@ -534,9 +535,9 @@
     "modelOutcome": "QUALIFIED",
     "usage": {
       "model": "gemini-3.6-flash",
-      "inputTokens": 3565,
-      "outputTokens": 1763,
-      "costInr": 0.459355
+      "inputTokens": 3639,
+      "outputTokens": 2219,
+      "costInr": 0.556965
     }
   },
   {
@@ -549,25 +550,25 @@
       "category": "ENQUIRY",
       "outcome": "REJECTED",
       "reason_code": "TIMELINE",
-      "reason_detail": "needs completion before Diwali (~3 weeks away)",
+      "reason_detail": "needs completion before Diwali (~3 weeks)",
       "criteria": [
         {
           "id": "project",
           "verdict": "pass",
           "evidence": "I want to redo my living room and kitchen",
-          "note": "Living room and kitchen redesign with execution requested."
+          "note": "Living room and kitchen redesign with execution."
         },
         {
           "id": "location",
           "verdict": "unclear",
           "evidence": "not mentioned",
-          "note": "Locality/city was not specified during the call."
+          "note": "Project location was not mentioned."
         },
         {
           "id": "timeline",
           "verdict": "fail",
-          "evidence": "I want to redo my living room and kitchen before Diwali.",
-          "note": "Completion required within 3 weeks (before Diwali), which is well under the 8-week minimum threshold."
+          "evidence": "redo my living room and kitchen before Diwali",
+          "note": "Needs completion before Diwali (about 3 weeks away), which is well under the 8-week minimum threshold."
         },
         {
           "id": "budget",
@@ -579,7 +580,7 @@
           "id": "decision_maker",
           "verdict": "pass",
           "evidence": "I want to redo my living room and kitchen",
-          "note": "Caller is acting as the primary decision-maker."
+          "note": "Caller speaks for themselves as the decision-maker."
         }
       ],
       "confidence": 0.95,
@@ -588,10 +589,10 @@
         "phone": "",
         "email": "",
         "locality": "",
-        "property_type": "residential",
+        "property_type": "",
         "bhk": "",
         "carpet_area": "",
-        "scope": "living room and kitchen redo",
+        "scope": "redo living room and kitchen",
         "execution_or_advice": "execution",
         "completion_date": "before Diwali (~3 weeks)",
         "ownership": "",
@@ -602,7 +603,7 @@
         "source": ""
       },
       "flags": [
-        "Caller asked about starting after Diwali but declined to leave details, saying they would think and call back"
+        "Caller requested completion before Diwali (approx 3 weeks away)."
       ],
       "missing_fields": [
         "name",
@@ -618,8 +619,8 @@
         "source"
       ],
       "clarifying_question": "",
-      "client_reason": "Our full design and execution process requires a minimum lead time of 8 to 10 weeks to maintain quality, so we are unable to take on projects needed within three weeks.",
-      "summary": "Caller asked to redo living room and kitchen before Diwali.\nProject requires execution within ~3 weeks; caller undecided on starting post-Diwali.\nOutcome: REJECTED due to unrealistic timeline.",
+      "client_reason": "Our design and execution process requires at least 8 to 10 weeks to deliver quality work, so we are unable to take on projects that require completion within 3 weeks.",
+      "summary": "Enquiry for living room and kitchen redesign (location not provided).\nCaller required full execution completed before Diwali (in 3 weeks).\nOutcome: REJECTED due to tight timeline (minimum lead time is 8 weeks).",
       "language": "English"
     },
     "decision": {
@@ -629,9 +630,9 @@
     "modelOutcome": "REJECTED",
     "usage": {
       "model": "gemini-3.6-flash",
-      "inputTokens": 3529,
-      "outputTokens": 1961,
-      "costInr": 0.500035
+      "inputTokens": 3603,
+      "outputTokens": 1810,
+      "costInr": 0.470175
     }
   },
   {
@@ -644,37 +645,37 @@
       "category": "ESCALATED",
       "outcome": "ESCALATED",
       "reason_code": "EXISTING_CLIENT",
-      "reason_detail": "Existing client reporting unresponsive designer on ongoing project",
+      "reason_detail": "existing client complaining about non-responsive designer on ongoing project",
       "criteria": [
         {
           "id": "project",
           "verdict": "pass",
           "evidence": "Flat in Viman Nagar — 2BHK",
-          "note": "Existing 2BHK interior project in progress."
+          "note": "Ongoing 2BHK residential interior project"
         },
         {
           "id": "location",
           "verdict": "pass",
           "evidence": "Viman Nagar",
-          "note": "Viman Nagar is in Pune city."
+          "note": "Located in Viman Nagar, Pune"
         },
         {
           "id": "timeline",
           "verdict": "pass",
-          "evidence": "project has been going for three months",
-          "note": "Project is already under execution."
+          "evidence": "going for three months",
+          "note": "Active project in progress for 3 months"
         },
         {
           "id": "budget",
           "verdict": "pass",
           "evidence": "not mentioned",
-          "note": "Budget was not discussed on this call."
+          "note": "Budget not discussed on call"
         },
         {
           "id": "decision_maker",
           "verdict": "pass",
-          "evidence": "Sheetal Deshpande. My designer is Aryan.",
-          "note": "Caller is the project owner."
+          "evidence": "Sheetal Deshpande",
+          "note": "Caller is the client"
         }
       ],
       "confidence": 1,
@@ -686,7 +687,7 @@
         "property_type": "Flat",
         "bhk": "2BHK",
         "carpet_area": "",
-        "scope": "2BHK interior project",
+        "scope": "Ongoing 2BHK project",
         "execution_or_advice": "execution",
         "completion_date": "",
         "ownership": "",
@@ -697,9 +698,8 @@
         "source": ""
       },
       "flags": [
-        "existing client complaint",
-        "designer Aryan unresponsive for 5 days",
-        "requested callback from Nikhil or senior manager within 15 minutes"
+        "caller frustrated — designer Aryan hasn't responded in 5 days",
+        "caller requested callback from Nikhil or senior manager within 15 minutes"
       ],
       "missing_fields": [
         "phone",
@@ -713,7 +713,7 @@
       ],
       "clarifying_question": "",
       "client_reason": "",
-      "summary": "Sheetal Deshpande called regarding an ongoing 2BHK interior project in Viman Nagar.\nCaller is an existing client upset that designer Aryan has not responded to messages/calls for 5 days.\nESCALATED: Caller requested an urgent callback within 15 minutes from Nikhil or a senior manager.",
+      "summary": "Sheetal Deshpande calling about an ongoing 2BHK project in Viman Nagar.\nClient reports no response from assigned designer (Aryan) in 5 days after multiple attempts.\nEscalated for immediate senior/Nikhil callback within 15 minutes.",
       "language": "English"
     },
     "decision": {
@@ -723,9 +723,9 @@
     "modelOutcome": "ESCALATED",
     "usage": {
       "model": "gemini-3.6-flash",
-      "inputTokens": 3556,
-      "outputTokens": 1594,
-      "costInr": 0.42364
+      "inputTokens": 3630,
+      "outputTokens": 1125,
+      "costInr": 0.327
     }
   },
   {
@@ -738,61 +738,59 @@
       "category": "ENQUIRY",
       "outcome": "REJECTED",
       "reason_code": "BUDGET",
-      "reason_detail": "volunteered budget of ₹1–1.5 lakh is below the minimum scope requirement for a kitchen and bedroom redesign with execution",
+      "reason_detail": "budget of ₹1–1.5 lakh is below minimum required for kitchen and bedroom scope",
       "criteria": [
         {
           "id": "project",
           "verdict": "pass",
-          "evidence": "I have a 1BHK in Kharadi — about 550 sq ft. I want to do the kitchen and one bedroom.",
-          "note": "Redesign and execution of kitchen and bedroom in a 1BHK residential flat."
+          "evidence": "I want to do the kitchen and one bedroom.",
+          "note": "Wants full design and execution for kitchen and bedroom."
         },
         {
           "id": "location",
           "verdict": "pass",
-          "evidence": "1BHK in Kharadi",
-          "note": "Kharadi is located within Pune city."
+          "evidence": "Kharadi",
+          "note": "Locality within Pune city."
         },
         {
           "id": "timeline",
           "verdict": "unclear",
           "evidence": "not mentioned",
-          "note": "No timeline or target completion date was mentioned during the call."
+          "note": "Timeline was not discussed."
         },
         {
           "id": "budget",
           "verdict": "fail",
           "evidence": "My budget is 1 to 1.5 lakh maximum for everything.",
-          "note": "Budget of ₹1–1.5 lakh for full execution of a kitchen and bedroom is well below the minimum project threshold."
+          "note": "Volunteered budget is well below the minimum requirement for kitchen and bedroom redesign."
         },
         {
           "id": "decision_maker",
           "verdict": "pass",
-          "evidence": "I have a 1BHK in Kharadi — about 550 sq ft. I want to do the kitchen and one bedroom.",
-          "note": "Caller speaks directly as the homeowner and decision-maker."
+          "evidence": "I have a 1BHK in Kharadi",
+          "note": "Caller is the property owner speaking directly for their project."
         }
       ],
-      "confidence": 1,
+      "confidence": 0.98,
       "handoff": {
         "name": "",
         "phone": "",
         "email": "",
         "locality": "Kharadi",
-        "property_type": "apartment",
+        "property_type": "1BHK apartment",
         "bhk": "1BHK",
         "carpet_area": "550 sq ft",
         "scope": "kitchen and one bedroom",
         "execution_or_advice": "execution",
         "completion_date": "",
-        "ownership": "owner",
-        "decision_maker": "caller",
+        "ownership": "",
+        "decision_maker": "self",
         "budget_volunteered": "1 to 1.5 lakh maximum",
         "consultation_preference": "",
         "visit_type": "",
         "source": ""
       },
-      "flags": [
-        "budget volunteered is below project minimums"
-      ],
+      "flags": [],
       "missing_fields": [
         "name",
         "phone",
@@ -804,8 +802,8 @@
         "source"
       ],
       "clarifying_question": "",
-      "client_reason": "Our full design and execution services require a higher overall investment for a kitchen and bedroom scope. We recommend consulting local contractors who can better assist within your target budget.",
-      "summary": "Caller in Kharadi looking for kitchen and bedroom design and execution for a 550 sq ft 1BHK.\nVolunteered a total budget of ₹1–1.5 lakh for the entire project.\nRejected as the budget is significantly below our minimum execution cost requirements.",
+      "client_reason": "Our interior design and execution services typically require a higher overall investment than your stated budget for a kitchen and bedroom. We suggest reaching out to local independent contractors who may be better suited for this scope.",
+      "summary": "Caller inquired about kitchen and bedroom interiors for a 550 sq ft 1BHK in Kharadi.\nVolunteered budget is ₹1–1.5 lakh maximum; timeline not mentioned.\nOutcome is REJECTED as the budget is below our minimum threshold for this scope.",
       "language": "English"
     },
     "decision": {
@@ -815,9 +813,9 @@
     "modelOutcome": "REJECTED",
     "usage": {
       "model": "gemini-3.6-flash",
-      "inputTokens": 3555,
-      "outputTokens": 2305,
-      "costInr": 0.572925
+      "inputTokens": 3629,
+      "outputTokens": 2473,
+      "costInr": 0.610055
     }
   },
   {
@@ -830,61 +828,61 @@
       "category": "ENQUIRY",
       "outcome": "HUMAN_REVIEW",
       "reason_code": "NEEDS_REVIEW",
-      "reason_detail": "Timeline for completion was not specified during the call",
+      "reason_detail": "Project timeline/completion date was not specified on the call.",
       "criteria": [
         {
           "id": "project",
           "verdict": "pass",
           "evidence": "I want to properly design the living room, bedroom, and kitchen — no structural changes, just design and fittings.",
-          "note": "2BHK rented apartment design and fittings in living room, bedroom, and kitchen; execution included."
+          "note": "Full design and execution for 2BHK living room, bedroom, and kitchen in a rented home."
         },
         {
           "id": "location",
           "verdict": "pass",
-          "evidence": "Baner",
-          "note": "Baner is within Pune city limits."
+          "evidence": "It’s a 2BHK in Baner.",
+          "note": "Baner is within Pune service area."
         },
         {
           "id": "timeline",
           "verdict": "unclear",
           "evidence": "not mentioned",
-          "note": "Caller did not mention any timeline or completion deadline."
+          "note": "Caller did not mention desired completion date or start timeline."
         },
         {
           "id": "budget",
           "verdict": "pass",
           "evidence": "not mentioned",
-          "note": "Budget was not volunteered."
+          "note": "Budget was not volunteered; defaults to pass."
         },
         {
           "id": "decision_maker",
           "verdict": "pass",
-          "evidence": "I want to properly design the living room, bedroom, and kitchen",
-          "note": "Caller is the resident tenant with landlord approval for non-structural work."
+          "evidence": "I’m in a rented apartment... Yes — they’re fine with it as long as we don’t break walls.",
+          "note": "Caller is the tenant and confirmed landlord permission has been granted."
         }
       ],
-      "confidence": 0.85,
+      "confidence": 0.95,
       "handoff": {
         "name": "",
         "phone": "",
         "email": "",
         "locality": "Baner",
-        "property_type": "apartment",
+        "property_type": "Rented apartment",
         "bhk": "2BHK",
         "carpet_area": "",
-        "scope": "living room, bedroom, and kitchen — design and fittings",
-        "execution_or_advice": "execution",
+        "scope": "Living room, bedroom, and kitchen design and fittings (non-structural/reversible)",
+        "execution_or_advice": "Execution",
         "completion_date": "",
-        "ownership": "rented",
-        "decision_maker": "caller",
+        "ownership": "Rented",
+        "decision_maker": "Caller (Tenant, with landlord consent)",
         "budget_volunteered": "",
         "consultation_preference": "",
         "visit_type": "",
         "source": ""
       },
       "flags": [
-        "Rented property (3-year lease, 1 year completed)",
-        "Landlord permission obtained for non-structural reversible modifications"
+        "Rented property — landlord permission confirmed for non-structural work",
+        "Caller contact details not collected during call"
       ],
       "missing_fields": [
         "name",
@@ -896,9 +894,9 @@
         "visit_type",
         "source"
       ],
-      "clarifying_question": "When are you looking to have the project completed?",
+      "clarifying_question": "When are you hoping to have the project completed?",
       "client_reason": "",
-      "summary": "Caller inquiring about 2BHK interior design & fittings for a rented apartment in Baner.\nTenant has landlord approval for non-structural work; scope covers living room, bedroom, and kitchen.\nOutcome is HUMAN_REVIEW as no completion timeline was specified during the call.",
+      "summary": "Caller enquiring for interior design and fittings for a 2BHK rented apartment in Baner.\nLandlord permission obtained for non-structural work across living room, bedroom, and kitchen.\nHuman review needed to confirm required project timeline before scheduling consultation.",
       "language": "English"
     },
     "decision": {
@@ -908,9 +906,9 @@
     "modelOutcome": "HUMAN_REVIEW",
     "usage": {
       "model": "gemini-3.6-flash",
-      "inputTokens": 3592,
-      "outputTokens": 2398,
-      "costInr": 0.59338
+      "inputTokens": 3666,
+      "outputTokens": 2406,
+      "costInr": 0.59691
     }
   },
   {
@@ -923,40 +921,40 @@
       "category": "ENQUIRY",
       "outcome": "QUALIFIED",
       "reason_code": "QUALIFIED",
-      "reason_detail": "Qualified enquiry for full villa interior design and execution in Kalyani Nagar",
+      "reason_detail": "Qualified full end-to-end residential villa project in Kalyani Nagar with realistic timeline.",
       "criteria": [
         {
           "id": "project",
           "verdict": "pass",
-          "evidence": "I’m calling about a villa project in Kalyani Nagar. My name is Anand Sharma. The property is about 5,500 sq ft — ground plus two floors. Full end-to-end design.",
-          "note": "Residential villa, full end-to-end design and execution scope."
+          "evidence": "villa project in Kalyani Nagar. My name is Anand Sharma. The property is about 5,500 sq ft — ground plus two floors. Full end-to-end design.",
+          "note": "Full residential villa design and execution."
         },
         {
           "id": "location",
           "verdict": "pass",
-          "evidence": "a villa project in Kalyani Nagar",
-          "note": "Kalyani Nagar is a standard locality in Pune city."
+          "evidence": "in Kalyani Nagar",
+          "note": "Kalyani Nagar is in Pune city."
         },
         {
           "id": "timeline",
           "verdict": "pass",
           "evidence": "March next year to move in. No rush.",
-          "note": "Completion target is March 2027, well over 8 weeks from call date."
+          "note": "Completion targeted for March 2027 (~6 months out), well above 8 weeks."
         },
         {
           "id": "budget",
           "verdict": "pass",
           "evidence": "not mentioned",
-          "note": "Budget was not volunteered, treated as pass per guidelines."
+          "note": "Not volunteered; treated as pass."
         },
         {
           "id": "decision_maker",
           "verdict": "pass",
-          "evidence": "I’m calling about a villa project in Kalyani Nagar. My name is Anand Sharma.",
-          "note": "Caller is the primary owner and decision-maker."
+          "evidence": "My name is Anand Sharma.",
+          "note": "Caller is the owner and decision-maker."
         }
       ],
-      "confidence": 0.95,
+      "confidence": 0.98,
       "handoff": {
         "name": "Anand Sharma",
         "phone": "",
@@ -965,7 +963,7 @@
         "property_type": "villa",
         "bhk": "",
         "carpet_area": "5,500 sq ft",
-        "scope": "Full end-to-end design",
+        "scope": "Full end-to-end design for ground plus two floors",
         "execution_or_advice": "execution",
         "completion_date": "March 2027",
         "ownership": "owned",
@@ -984,7 +982,7 @@
       ],
       "clarifying_question": "",
       "client_reason": "",
-      "summary": "Anand Sharma requested end-to-end design for a 5,500 sq ft G+2 villa in Kalyani Nagar.\nNew construction property in hand; move-in target is March 2027; requested a site visit.\nQualified — project scope, Pune location, timeline, and decision-maker criteria all met.",
+      "summary": "Anand Sharma inquiring for full interiors for a 5,500 sq ft villa in Kalyani Nagar.\nNew construction (ground + 2 floors), empty site, move-in targeted for March 2027.\nQualified enquiry; requested a site visit consultation this or next week.",
       "language": "English"
     },
     "decision": {
@@ -994,9 +992,9 @@
     "modelOutcome": "QUALIFIED",
     "usage": {
       "model": "gemini-3.6-flash",
-      "inputTokens": 3541,
-      "outputTokens": 1657,
-      "costInr": 0.436495
+      "inputTokens": 3615,
+      "outputTokens": 1885,
+      "costInr": 0.486225
     }
   },
   {
@@ -1009,40 +1007,40 @@
       "category": "ENQUIRY",
       "outcome": "HUMAN_REVIEW",
       "reason_code": "NEEDS_REVIEW",
-      "reason_detail": "Timeline for project completion was not discussed",
+      "reason_detail": "timeline not specified",
       "criteria": [
         {
           "id": "project",
           "verdict": "pass",
-          "evidence": "I want to redo my flat in Aundh. 3BHK, about 1,100 sq ft. What might it cost?",
-          "note": "Full residential flat redesign and execution (kitchen, wardrobes, living room)."
+          "evidence": "redo my flat in Aundh. 3BHK, about 1,100 sq ft. Kitchen, wardrobes in both bedrooms, living room.",
+          "note": "3BHK apartment redesign including kitchen, wardrobes, and living room with full execution."
         },
         {
           "id": "location",
           "verdict": "pass",
           "evidence": "Aundh",
-          "note": "Aundh is located within Pune city limits."
+          "note": "Aundh is a prime locality in Pune city."
         },
         {
           "id": "timeline",
           "verdict": "unclear",
           "evidence": "not mentioned",
-          "note": "Caller did not state any expected timeline or target completion date."
+          "note": "Caller did not provide any completion date or target timeline."
         },
         {
           "id": "budget",
           "verdict": "pass",
           "evidence": "not mentioned",
-          "note": "Caller inquired about pricing range but did not volunteer a budget cap."
+          "note": "Caller asked for cost estimates but did not volunteer a budget figure."
         },
         {
           "id": "decision_maker",
           "verdict": "pass",
-          "evidence": "I want to redo my flat in Aundh",
-          "note": "Caller spoke directly regarding their own home."
+          "evidence": "I want to redo my flat... Let’s book then.",
+          "note": "Caller is the property owner and decision-maker."
         }
       ],
-      "confidence": 0.9,
+      "confidence": 0.85,
       "handoff": {
         "name": "",
         "phone": "",
@@ -1052,7 +1050,7 @@
         "bhk": "3BHK",
         "carpet_area": "1,100 sq ft",
         "scope": "Kitchen, wardrobes in both bedrooms, living room",
-        "execution_or_advice": "execution",
+        "execution_or_advice": "design and execution",
         "completion_date": "",
         "ownership": "",
         "decision_maker": "caller",
@@ -1062,7 +1060,8 @@
         "source": ""
       },
       "flags": [
-        "asked about pricing (deflected)"
+        "Asked for pricing/ballpark figure (deflected to consultation)",
+        "Timeline not mentioned"
       ],
       "missing_fields": [
         "name",
@@ -1074,9 +1073,9 @@
         "visit_type",
         "source"
       ],
-      "clarifying_question": "When are you looking to have the project completed?",
+      "clarifying_question": "When are you hoping to have the project completed?",
       "client_reason": "",
-      "summary": "Enquiry for a 3BHK flat (1,100 sq ft) in Aundh for kitchen, wardrobes, and living room.\nCaller pushed for a rough price range which was deflected; caller agreed to book a consultation.\nTarget completion timeline was not mentioned and needs confirmation.",
+      "summary": "Caller inquiring about 3BHK flat interior redesign (1,100 sq ft) in Aundh.\nScope covers kitchen, living room, and wardrobes in two bedrooms; asked for cost range.\nNeeds human review to clarify target project completion timeline.",
       "language": "English"
     },
     "decision": {
@@ -1086,9 +1085,9 @@
     "modelOutcome": "HUMAN_REVIEW",
     "usage": {
       "model": "gemini-3.6-flash",
-      "inputTokens": 3574,
-      "outputTokens": 2249,
-      "costInr": 0.56164
+      "inputTokens": 3648,
+      "outputTokens": 2342,
+      "costInr": 0.58302
     }
   },
   {
@@ -1101,37 +1100,37 @@
       "category": "ENQUIRY",
       "outcome": "HUMAN_REVIEW",
       "reason_code": "NEEDS_REVIEW",
-      "reason_detail": "timeline not specified and decision sits with parents attending consultation",
+      "reason_detail": "timeline not specified",
       "criteria": [
         {
           "id": "project",
           "verdict": "pass",
-          "evidence": "an interior project for my parents. They have a 3BHK in Hadapsar — new possession. They want a proper design.",
-          "note": "Full home 3BHK residential interior design project."
+          "evidence": "interior project for my parents. They have a 3BHK in Hadapsar",
+          "note": "3BHK residential interior design project."
         },
         {
           "id": "location",
           "verdict": "pass",
           "evidence": "3BHK in Hadapsar",
-          "note": "Hadapsar is located within Pune city."
+          "note": "Hadapsar is within Pune city."
         },
         {
           "id": "timeline",
           "verdict": "unclear",
           "evidence": "not mentioned",
-          "note": "Target completion date or timeline was not discussed beyond 'new possession'."
+          "note": "Caller mentioned new possession but did not specify completion timeline."
         },
         {
           "id": "budget",
           "verdict": "pass",
           "evidence": "not mentioned",
-          "note": "Budget was not volunteered by caller."
+          "note": "Budget was not volunteered."
         },
         {
           "id": "decision_maker",
           "verdict": "unclear",
-          "evidence": "I’ll tell them about the consultation and they’ll decide... Yes, they would come.",
-          "note": "Caller is screening for parents who hold final decision authority and will attend consultation."
+          "evidence": "I'll tell them about the consultation and they'll decide... Yes, they would come.",
+          "note": "Caller is doing initial screening; parents are decision-makers and will attend consultation."
         }
       ],
       "confidence": 0.85,
@@ -1140,22 +1139,23 @@
         "phone": "",
         "email": "",
         "locality": "Hadapsar",
-        "property_type": "apartment",
+        "property_type": "Apartment",
         "bhk": "3BHK",
         "carpet_area": "",
-        "scope": "3BHK interior project",
-        "execution_or_advice": "",
+        "scope": "Full interiors / proper design for 3BHK",
+        "execution_or_advice": "design and execution implied",
         "completion_date": "",
-        "ownership": "parents",
-        "decision_maker": "parents",
+        "ownership": "Parents (new possession)",
+        "decision_maker": "Parents",
         "budget_volunteered": "",
         "consultation_preference": "",
         "visit_type": "",
         "source": ""
       },
       "flags": [
-        "Caller making initial inquiry for elderly parents",
-        "Parents are final decision makers and will attend consultation"
+        "Caller inquiring on behalf of parents",
+        "Parents are final decision-makers and will attend consultation",
+        "Timeline not mentioned"
       ],
       "missing_fields": [
         "name",
@@ -1163,12 +1163,13 @@
         "email",
         "carpet_area",
         "completion_date",
-        "execution_or_advice",
-        "consultation_preference"
+        "consultation_preference",
+        "visit_type",
+        "source"
       ],
-      "clarifying_question": "When are your parents looking to start the execution and move into the new apartment?",
+      "clarifying_question": "When are your parents looking to have the interior work completed for their Hadapsar home?",
       "client_reason": "",
-      "summary": "Caller inquiring on behalf of parents for a 3BHK in Hadapsar (new possession).\nCaller stated parents will attend consultation and make the decision; timeline not specified.\nOutcome: HUMAN_REVIEW — need timeline details before confirming consultation.",
+      "summary": "Caller inquiring on behalf of parents for a 3BHK interior project in Hadapsar.\nParents own the property (new possession) and will attend consultation to decide; timeline is not specified.\nOutcome: HUMAN_REVIEW — front desk to clarify target timeline on callback.",
       "language": "English"
     },
     "decision": {
@@ -1178,9 +1179,9 @@
     "modelOutcome": "HUMAN_REVIEW",
     "usage": {
       "model": "gemini-3.6-flash",
-      "inputTokens": 3567,
-      "outputTokens": 3242,
-      "costInr": 0.769995
+      "inputTokens": 3641,
+      "outputTokens": 3685,
+      "costInr": 0.864875
     }
   },
   {
@@ -1193,40 +1194,40 @@
       "category": "ENQUIRY",
       "outcome": "QUALIFIED",
       "reason_code": "QUALIFIED",
-      "reason_detail": "2BHK full home project in Undri within scope and timeline",
+      "reason_detail": "Full home design and execution for 2BHK in Undri with possession in 6 weeks.",
       "criteria": [
         {
           "id": "project",
           "verdict": "pass",
           "evidence": "Full home — kitchen, wardrobes, living room. The full package.",
-          "note": "Residential 2BHK full home redesign with execution."
+          "note": "Full residential interior design and execution for an 875 sq ft 2BHK flat."
         },
         {
           "id": "location",
           "verdict": "pass",
-          "evidence": "my flat in Undri",
-          "note": "Undri is a valid locality in Pune city."
+          "evidence": "in Undri",
+          "note": "Undri is a locality in Pune."
         },
         {
           "id": "timeline",
           "verdict": "pass",
-          "evidence": "possession of my flat in Undri in about six weeks. I want to start the design right away.",
-          "note": "Starting design phase 6 weeks prior to possession allows realistic total timeline (>8 weeks to completion)."
+          "evidence": "possession of my flat in Undri in about six weeks",
+          "note": "Design starts now, possession in 6 weeks, execution following possession gives timeline > 8 weeks."
         },
         {
           "id": "budget",
           "verdict": "pass",
           "evidence": "not mentioned",
-          "note": "Budget was not discussed or volunteered."
+          "note": "Budget was not volunteered; defaults to pass."
         },
         {
           "id": "decision_maker",
           "verdict": "pass",
-          "evidence": "Yes — my husband and I. He said to go ahead and book the consultation.",
-          "note": "Caller is co-owner and authorised by husband to book."
+          "evidence": "my husband and I. He said to go ahead and book the consultation.",
+          "note": "Caller is co-owner and authorised by spouse to proceed."
         }
       ],
-      "confidence": 1,
+      "confidence": 0.98,
       "handoff": {
         "name": "Smita",
         "phone": "",
@@ -1235,19 +1236,17 @@
         "property_type": "flat",
         "bhk": "2BHK",
         "carpet_area": "875 sq ft",
-        "scope": "Full home — kitchen, wardrobes, living room. The full package.",
+        "scope": "Full home — kitchen, wardrobes, living room",
         "execution_or_advice": "execution",
-        "completion_date": "Possession in ~6 weeks, starting design immediately",
+        "completion_date": "Possession in about 6 weeks",
         "ownership": "owner",
-        "decision_maker": "Smita and her husband (authorised)",
+        "decision_maker": "Smita and her husband",
         "budget_volunteered": "",
         "consultation_preference": "",
-        "visit_type": "site visit (builder will allow entry before possession)",
+        "visit_type": "site visit (builder will allow access now)",
         "source": ""
       },
-      "flags": [
-        "Builder permits site access prior to possession in 6 weeks"
-      ],
+      "flags": [],
       "missing_fields": [
         "phone",
         "email",
@@ -1256,7 +1255,7 @@
       ],
       "clarifying_question": "",
       "client_reason": "",
-      "summary": "Smita enquiring for 2BHK flat (875 sq ft) in Undri.\nPossession in 6 weeks, ready to start design phase immediately for full home execution; joint owner authorised to proceed.\nQUALIFIED: Standard residential full home project in Pune within valid timeline.",
+      "summary": "Smita requested full interiors for an 875 sq ft 2BHK flat in Undri.\nPossession is in 6 weeks with site access available now; caller and husband are joint decision-makers.\nOutcome is QUALIFIED as all criteria are met for design and execution.",
       "language": "English"
     },
     "decision": {
@@ -1266,9 +1265,9 @@
     "modelOutcome": "QUALIFIED",
     "usage": {
       "model": "gemini-3.6-flash",
-      "inputTokens": 3560,
-      "outputTokens": 1525,
-      "costInr": 0.40925
+      "inputTokens": 3634,
+      "outputTokens": 2063,
+      "costInr": 0.52408
     }
   },
   {
@@ -1281,49 +1280,49 @@
       "category": "ENQUIRY",
       "outcome": "HUMAN_REVIEW",
       "reason_code": "NEEDS_REVIEW",
-      "reason_detail": "Follow-up call for missing previous enquiry; project scope and timeline need to be collected.",
+      "reason_detail": "3BHK in Viman Nagar mentioned, but scope and timeline need clarification following up on prior missed call",
       "criteria": [
         {
           "id": "project",
           "verdict": "unclear",
           "evidence": "my 3BHK in Viman Nagar",
-          "note": "Caller mentioned a 3BHK in Viman Nagar, but specific scope and execution requirements were not detailed."
+          "note": "Caller mentioned a 3BHK in Viman Nagar but did not specify the scope or whether full execution is required."
         },
         {
           "id": "location",
           "verdict": "pass",
           "evidence": "Viman Nagar",
-          "note": "Viman Nagar is a standard locality within Pune city."
+          "note": "Viman Nagar is located within Pune city limits."
         },
         {
           "id": "timeline",
           "verdict": "unclear",
           "evidence": "not mentioned",
-          "note": "No project completion date or timeline was stated."
+          "note": "Timeline and required completion date were not discussed."
         },
         {
           "id": "budget",
           "verdict": "pass",
           "evidence": "not mentioned",
-          "note": "Budget was not discussed."
+          "note": "Budget was not volunteered, which defaults to pass."
         },
         {
           "id": "decision_maker",
           "verdict": "unclear",
           "evidence": "not mentioned",
-          "note": "Caller's decision-making status was not explicitly confirmed."
+          "note": "Ownership and decision-making status were not explicitly confirmed."
         }
       ],
-      "confidence": 0.9,
+      "confidence": 0.85,
       "handoff": {
         "name": "Girish Nair",
         "phone": "",
         "email": "",
         "locality": "Viman Nagar",
-        "property_type": "Apartment",
+        "property_type": "apartment",
         "bhk": "3BHK",
         "carpet_area": "",
-        "scope": "",
+        "scope": "3BHK",
         "execution_or_advice": "",
         "completion_date": "",
         "ownership": "",
@@ -1334,7 +1333,7 @@
         "source": ""
       },
       "flags": [
-        "caller frustrated — previously called on Monday and no team member got back to him"
+        "caller frustrated — previous enquiry on Monday received no follow-up"
       ],
       "missing_fields": [
         "phone",
@@ -1349,9 +1348,9 @@
         "visit_type",
         "source"
       ],
-      "clarifying_question": "Could you share the specific scope of work for your 3BHK in Viman Nagar and your target completion timeline?",
+      "clarifying_question": "Could you tell me a bit more about the scope of work and target timeline for your 3BHK in Viman Nagar?",
       "client_reason": "",
-      "summary": "Girish Nair called to follow up on a 3BHK enquiry in Viman Nagar submitted on Monday.\nCaller is upset that the studio failed to follow up or log details from the previous call.\nHuman review required to call back, apologize, and gather missing scope/timeline details.",
+      "summary": "Girish Nair calling about a 3BHK project in Viman Nagar.\nCaller previously inquired on Monday and expressed frustration over no follow-up; full scope and timeline not yet captured.\nOutcome is HUMAN_REVIEW to confirm project requirements and schedule consultation.",
       "language": "English"
     },
     "decision": {
@@ -1361,9 +1360,9 @@
     "modelOutcome": "HUMAN_REVIEW",
     "usage": {
       "model": "gemini-3.6-flash",
-      "inputTokens": 3543,
-      "outputTokens": 4007,
-      "costInr": 0.930045
+      "inputTokens": 3617,
+      "outputTokens": 2076,
+      "costInr": 0.526385
     }
   },
   {
@@ -1376,53 +1375,53 @@
       "category": "ENQUIRY",
       "outcome": "QUALIFIED",
       "reason_code": "QUALIFIED",
-      "reason_detail": "Valid residential interior design and execution project in Pimple Saudagar with March target completion.",
+      "reason_detail": "Qualified enquiry for 3BHK interior design and execution in Pimple Saudagar",
       "criteria": [
         {
           "id": "project",
           "verdict": "pass",
-          "evidence": "Kitchen, wardrobes, living room. We moved in with builder furniture and it’s very basic.",
-          "note": "3BHK partial home redesign including kitchen, wardrobes, and living room execution."
+          "evidence": "Kitchen, wardrobes, living room.",
+          "note": "Full design and execution scope for major residential areas."
         },
         {
           "id": "location",
           "verdict": "pass",
-          "evidence": "I’m Ritu Kapoor from Pimple Saudagar.",
+          "evidence": "Pimple Saudagar.",
           "note": "Pimple Saudagar is within PCMC service area."
         },
         {
           "id": "timeline",
           "verdict": "pass",
           "evidence": "Ideally done by March. Plenty of time.",
-          "note": "Completion targeted for March 2027, well beyond the 8-week minimum lead time."
+          "note": "Target completion March 2027 is ~6 months out, well beyond 8 weeks minimum."
         },
         {
           "id": "budget",
           "verdict": "pass",
           "evidence": "not mentioned",
-          "note": "Budget was not volunteered."
+          "note": "Budget not volunteered; treated as pass."
         },
         {
           "id": "decision_maker",
           "verdict": "pass",
           "evidence": "We’ve been here two years but never properly did the interiors. We want to start now.",
-          "note": "Caller is the homeowner living in the residence."
+          "note": "Caller is owner and decision-maker."
         }
       ],
-      "confidence": 1,
+      "confidence": 0.98,
       "handoff": {
         "name": "Ritu Kapoor",
         "phone": "",
         "email": "",
         "locality": "Pimple Saudagar",
-        "property_type": "Apartment",
+        "property_type": "apartment",
         "bhk": "3BHK",
         "carpet_area": "1,050 sq ft",
         "scope": "Kitchen, wardrobes, living room",
-        "execution_or_advice": "execution",
+        "execution_or_advice": "design and execution",
         "completion_date": "March 2027",
         "ownership": "owned",
-        "decision_maker": "Ritu Kapoor",
+        "decision_maker": "Ritu Kapoor (and family)",
         "budget_volunteered": "",
         "consultation_preference": "",
         "visit_type": "",
@@ -1438,7 +1437,7 @@
       ],
       "clarifying_question": "",
       "client_reason": "",
-      "summary": "Ritu Kapoor called regarding a 3BHK apartment in Pimple Saudagar.\n1,050 sq ft home needing kitchen, wardrobes, and living room interiors by March 2027.\nQualified enquiry for design and execution in PCMC.",
+      "summary": "Ritu Kapoor called regarding a 3BHK (1,050 sq ft) in Pimple Saudagar.\nScope covers kitchen, wardrobes, and living room execution with completion by March 2027.\nOutcome: QUALIFIED — location, scope, timeline, and decision-maker criteria met.",
       "language": "English"
     },
     "decision": {
@@ -1448,9 +1447,9 @@
     "modelOutcome": "QUALIFIED",
     "usage": {
       "model": "gemini-3.6-flash",
-      "inputTokens": 3580,
-      "outputTokens": 2357,
-      "costInr": 0.58447
+      "inputTokens": 3654,
+      "outputTokens": 1805,
+      "costInr": 0.4704
     }
   },
   {
@@ -1463,25 +1462,25 @@
       "category": "ENQUIRY",
       "outcome": "HUMAN_REVIEW",
       "reason_code": "NEEDS_REVIEW",
-      "reason_detail": "Very small commercial unit (180 sq ft pod) with unspecified location and timeline",
+      "reason_detail": "Very small commercial unit (180 sq ft pod) with unconfirmed location and timeline",
       "criteria": [
         {
           "id": "project",
           "verdict": "unclear",
           "evidence": "I have a 180 sq ft pod I want to make look really nice. Good lighting, a nice desk, some storage.",
-          "note": "Small commercial pod unit; unclear if scope constitutes full design-and-execution or minor furnishing."
+          "note": "Very small commercial space (180 sq ft pod); unclear if scope requires full execution or loose fitout."
         },
         {
           "id": "location",
           "verdict": "unclear",
           "evidence": "not mentioned",
-          "note": "Location was not specified in the call."
+          "note": "Locality within Pune/PCMC was not stated."
         },
         {
           "id": "timeline",
           "verdict": "unclear",
           "evidence": "not mentioned",
-          "note": "Project timeline was not discussed."
+          "note": "Completion timeline was not discussed."
         },
         {
           "id": "budget",
@@ -1493,7 +1492,7 @@
           "id": "decision_maker",
           "verdict": "pass",
           "evidence": "I run a small coworking space.",
-          "note": "Caller runs the space and has authority to proceed."
+          "note": "Caller is the operator/decision-maker of the coworking space."
         }
       ],
       "confidence": 0.85,
@@ -1502,38 +1501,36 @@
         "phone": "",
         "email": "",
         "locality": "",
-        "property_type": "coworking pod",
+        "property_type": "coworking space / commercial pod",
         "bhk": "",
         "carpet_area": "180 sq ft",
         "scope": "180 sq ft pod — lighting, desk, storage",
-        "execution_or_advice": "unclear",
+        "execution_or_advice": "",
         "completion_date": "",
         "ownership": "",
-        "decision_maker": "Caller (runs coworking space)",
+        "decision_maker": "coworking operator",
         "budget_volunteered": "",
         "consultation_preference": "",
         "visit_type": "",
         "source": ""
       },
       "flags": [
-        "Agent turned away lead based on 180 sq ft size limit",
-        "Location and timeline were not captured before call ended"
+        "Agent turned down lead during call citing <500 sq ft commercial minimum",
+        "Needs human review on whether 180 sq ft commercial fitout is viable"
       ],
       "missing_fields": [
         "name",
         "phone",
         "email",
         "locality",
-        "bhk",
         "completion_date",
-        "ownership",
         "consultation_preference",
         "visit_type",
         "source"
       ],
-      "clarifying_question": "Where is the coworking space located, and are you looking for complete design and execution service for the pod?",
+      "clarifying_question": "Where is your coworking space located, and are you looking for complete end-to-end design and execution for the pod?",
       "client_reason": "",
-      "summary": "Caller wants design work for a 180 sq ft coworking pod.\nLocation and timeline were not discussed; carpet area is 180 sq ft.\nOutcome: HUMAN_REVIEW due to small commercial unit scope and missing location.",
+      "summary": "Caller running a coworking space inquired about designing a 180 sq ft pod.\n180 sq ft commercial pod; locality and project timeline not mentioned.\nHuman review required to verify scope fit for small commercial pod and confirm location.",
       "language": "English"
     },
     "decision": {
@@ -1543,9 +1540,9 @@
     "modelOutcome": "HUMAN_REVIEW",
     "usage": {
       "model": "gemini-3.6-flash",
-      "inputTokens": 3550,
-      "outputTokens": 2598,
-      "costInr": 0.63433
+      "inputTokens": 3624,
+      "outputTokens": 2894,
+      "costInr": 0.69834
     }
   },
   {
@@ -1563,32 +1560,32 @@
         {
           "id": "project",
           "verdict": "fail",
-          "evidence": "I’m planning to open a restaurant in Koregaon Park.",
-          "note": "Hospitality and restaurant interiors are outside Aangan Studio's scope of services."
+          "evidence": "planning to open a restaurant in Koregaon Park",
+          "note": "Restaurant and hospitality interiors are out of scope."
         },
         {
           "id": "location",
           "verdict": "pass",
           "evidence": "Koregaon Park",
-          "note": "Koregaon Park is a valid locality in Pune city."
+          "note": "Koregaon Park is within Pune city."
         },
         {
           "id": "timeline",
           "verdict": "unclear",
           "evidence": "not mentioned",
-          "note": "Timeline was not discussed."
+          "note": "No timeline was mentioned during the call."
         },
         {
           "id": "budget",
           "verdict": "pass",
           "evidence": "not mentioned",
-          "note": "Budget was not mentioned."
+          "note": "Budget was not discussed."
         },
         {
           "id": "decision_maker",
           "verdict": "pass",
           "evidence": "I’m planning to open a restaurant",
-          "note": "Caller is the owner planning the project."
+          "note": "Caller is opening the business themselves."
         }
       ],
       "confidence": 1,
@@ -1597,35 +1594,36 @@
         "phone": "",
         "email": "",
         "locality": "Koregaon Park",
-        "property_type": "Restaurant / Commercial",
+        "property_type": "Commercial (Restaurant)",
         "bhk": "",
         "carpet_area": "",
-        "scope": "Interior design for a restaurant",
+        "scope": "Interior design for a new restaurant",
         "execution_or_advice": "",
         "completion_date": "",
         "ownership": "",
-        "decision_maker": "Caller",
+        "decision_maker": "Caller (owner)",
         "budget_volunteered": "",
         "consultation_preference": "",
         "visit_type": "",
-        "source": ""
+        "source": "Seen past work"
       },
-      "flags": [],
+      "flags": [
+        "Out-of-scope project (hospitality/restaurant)",
+        "Caller asked for a referral"
+      ],
       "missing_fields": [
         "name",
         "phone",
         "email",
-        "bhk",
         "carpet_area",
         "completion_date",
         "ownership",
         "consultation_preference",
-        "visit_type",
-        "source"
+        "visit_type"
       ],
       "clarifying_question": "",
-      "client_reason": "We focus exclusively on residential and office spaces, so we are unable to take on restaurant or hospitality projects.",
-      "summary": "Caller inquired about interior design for a new restaurant in Koregaon Park.\nProject is commercial hospitality, which falls outside Aangan Studio's service domain.\nOutcome: REJECTED due to scope misalignment.",
+      "client_reason": "We specialize in residential homes and office spaces, so we don't take on restaurant or hospitality projects. We recommend reaching out to an interior design studio specializing in commercial hospitality.",
+      "summary": "Caller asked about interior design for a new restaurant in Koregaon Park.\nCommercial hospitality project; size, budget, and timeline not discussed.\nRejected — restaurant/hospitality interiors are outside Aangan Studio's scope.",
       "language": "English"
     },
     "decision": {
@@ -1635,9 +1633,9 @@
     "modelOutcome": "REJECTED",
     "usage": {
       "model": "gemini-3.6-flash",
-      "inputTokens": 3526,
-      "outputTokens": 1417,
-      "costInr": 0.38572
+      "inputTokens": 3600,
+      "outputTokens": 1497,
+      "costInr": 0.40437
     }
   },
   {
@@ -1650,37 +1648,37 @@
       "category": "ENQUIRY",
       "outcome": "QUALIFIED",
       "reason_code": "QUALIFIED",
-      "reason_detail": "2BHK full home design and execution in Magarpatta with flexible timeline (January 2027 execution)",
+      "reason_detail": "Full 2BHK interior design and execution in Magarpatta with January start",
       "criteria": [
         {
           "id": "project",
           "verdict": "pass",
           "evidence": "Kitchen, both bedrooms, living room. About 900 sq ft.",
-          "note": "Full 2BHK interior design and execution project."
+          "note": "Full residential 2BHK design and execution project."
         },
         {
           "id": "location",
           "verdict": "pass",
           "evidence": "Magarpatta — Cybercity area",
-          "note": "Magarpatta is a prime residential locality in Pune city."
+          "note": "Magarpatta is located within Pune service area."
         },
         {
           "id": "timeline",
           "verdict": "pass",
           "evidence": "a January start for execution would be ideal",
-          "note": "Execution start in January 2027 is more than 8 weeks from the call date of September 2026."
+          "note": "Execution planned for January 2027, over 3 months out."
         },
         {
           "id": "budget",
           "verdict": "pass",
           "evidence": "not mentioned",
-          "note": "Budget was not volunteered."
+          "note": "Budget not mentioned, treated as pass per guidelines."
         },
         {
           "id": "decision_maker",
           "verdict": "pass",
           "evidence": "Yes — my husband and I. We both want to be at the consultation.",
-          "note": "Caller and her husband are joint owners and decision-makers."
+          "note": "Owner and co-decision maker attending consultation."
         }
       ],
       "confidence": 1,
@@ -1689,31 +1687,32 @@
         "phone": "",
         "email": "",
         "locality": "Magarpatta",
-        "property_type": "Apartment",
+        "property_type": "apartment",
         "bhk": "2BHK",
         "carpet_area": "900 sq ft",
         "scope": "Kitchen, both bedrooms, living room",
-        "execution_or_advice": "design and execution",
-        "completion_date": "",
-        "ownership": "Owned",
+        "execution_or_advice": "execution",
+        "completion_date": "January execution start",
+        "ownership": "owned",
         "decision_maker": "Pooja and husband",
         "budget_volunteered": "",
         "consultation_preference": "",
         "visit_type": "",
         "source": ""
       },
-      "flags": [],
+      "flags": [
+        "Both husband and wife want to attend the consultation"
+      ],
       "missing_fields": [
         "phone",
         "email",
-        "completion_date",
         "consultation_preference",
         "visit_type",
         "source"
       ],
       "clarifying_question": "",
       "client_reason": "",
-      "summary": "Pooja — 2BHK (900 sq ft) in Magarpatta, Pune\nFull home scope (kitchen, living room, 2 bedrooms); planning January 2027 execution start; owned jointly with husband\nOutcome: QUALIFIED — clear scope, location, and timeline within service parameters.",
+      "summary": "Pooja enquiring for full 2BHK interior design in Magarpatta.\n900 sq ft owned flat; looking for a January 2027 execution start.\nQualified enquiry for full home residential design and execution.",
       "language": "English"
     },
     "decision": {
@@ -1723,9 +1722,9 @@
     "modelOutcome": "QUALIFIED",
     "usage": {
       "model": "gemini-3.6-flash",
-      "inputTokens": 3526,
-      "outputTokens": 1993,
-      "costInr": 0.50668
+      "inputTokens": 3600,
+      "outputTokens": 1591,
+      "costInr": 0.42411
     }
   }
 ]

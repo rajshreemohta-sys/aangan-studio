@@ -85,7 +85,7 @@ export async function processCall(callId: string, opts: PipelineOptions = {}): P
   const steps: Step[] = [];
   const record = (step: string, status: StepStatus, detail: string) => steps.push({ step, status, detail, at: new Date().toISOString() });
   const attempt = async (step: string, fn: () => Promise<string>) => {
-    if (opts.dryRun) return record(step, "skipped", "dry run (seed data) — nothing sent");
+    if (opts.dryRun) return record(step, "skipped", "dry run — nothing sent");
     try {
       record(step, "ok", await fn());
     } catch (e) {

@@ -20,7 +20,7 @@ Set `category`:
   - the caller is complaining about **work Aangan has delivered** or a designer.
   
   A *new* enquirer who is annoyed that nobody got back to them is **not** escalated — that is a new enquiry. Classify it normally and put the frustration in `flags`.
-- `INCOMPLETE` — the call dropped or ended before the caller described the project at all (we don't know what they want or where), or it's a missed call with no transcript. If the caller rang back in the same transcript and gave details, judge the complete conversation.
+- `INCOMPLETE` — the call dropped or ended before the caller said **anything** about the project — no property type, no locality, no rooms — or it's a missed call with no transcript. If the caller gave even one project detail (e.g. "my 3BHK in Viman Nagar"), it is an `ENQUIRY`: score the criteria and let the gaps come out as `unclear`. If the caller rang back in the same transcript and gave details, judge the complete conversation.
 - `NOT_ENQUIRY` — vendor, supplier, job seeker, sales pitch, spam, wrong number.
 - `ENQUIRY` — everything else, including vague, small, or out-of-scope project enquiries (those are judged by the criteria, not here).
 

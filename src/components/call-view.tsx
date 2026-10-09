@@ -59,7 +59,7 @@ export function CallView({ detail, internal }: { detail: CallDetail; internal: b
 
         {booking && (
           <div className="panel bg-lime p-6 fade-up" style={{ ["--i" as string]: 1 }}>
-            <p className="label">Consultation {booking.status === "simulated" ? "(simulated — seed data)" : "booked"}</p>
+            <p className="label">Consultation {booking.status === "simulated" ? "(simulated — not on a real calendar)" : "booked"}</p>
             <p className="display text-3xl mt-2">{formatIst(booking.starts_at, { weekday: "long", day: "numeric", month: "long", hour: "numeric", minute: "2-digit" })}</p>
             <p className="mt-1">with {booking.designers?.name ?? "a designer"} · {booking.visit_type || "place to confirm"}</p>
           </div>
@@ -133,7 +133,7 @@ export function CallView({ detail, internal }: { detail: CallDetail; internal: b
       <Window title={`transcript · ${formatIst(call.started_at)} · ${Math.round(call.duration_seconds / 60)} min`} className="fade-up lg:sticky lg:top-6">
         <div className="p-5 max-h-[78vh] overflow-auto text-[15px] leading-relaxed space-y-2.5">
           {call.raw_transcript ? (
-            call.raw_transcript.split("\n").map((line: string, i: number) => {
+            call.raw_transcript.split(/\r?\n/).filter((l: string) => l.trim()).map((line: string, i: number) => {
               const m = line.match(/^(Agent|Vaani|Front Desk|Caller):\s*(.*)$/);
               if (!m) return <p key={i} className="label pt-2">{line}</p>;
               const agent = m[1] !== "Caller";
