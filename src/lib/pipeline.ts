@@ -8,7 +8,6 @@ import { isAfterHours } from "./hours";
 import { resendCostPerEmail, sendEmail, type Email } from "./resend";
 import { findSlot, parsePreference, type Slot } from "./slots";
 import { json, one, query } from "./db";
-import { transcriptSignature } from "./auth";
 import type { CallRow, DesignerRow } from "./database.types";
 
 /**
@@ -172,7 +171,7 @@ export async function processCall(callId: string, opts: PipelineOptions = {}): P
     );
     const leadId = lead!.id;
 
-    const transcriptUrl = `${appUrl()}/t/${callId}?sig=${await transcriptSignature(callId)}`;
+    const transcriptUrl = `${appUrl()}/dashboard/calls/${callId}`;
     const emailsSent: string[] = [];
     const send = async (email: Email, to: string, label: string) => {
       await sendEmail({ ...email, to });

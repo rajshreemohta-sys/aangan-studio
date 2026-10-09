@@ -85,7 +85,7 @@ Three consecutive runs all matched 19/19. Classifying all 19 costs about ₹10.5
 | **Gemini** | API key from Google AI Studio | `GEMINI_API_KEY`, `GEMINI_MODEL`, `GEMINI_INR_PER_1M_INPUT`, `GEMINI_INR_PER_1M_OUTPUT` |
 | **Google Calendar** | OAuth client (Desktop or Web) + a refresh token for a studio Google account that has *Make changes to events* on every designer's calendar | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REFRESH_TOKEN` |
 | **Resend** | API key and a verified sending domain | `RESEND_API_KEY`, `RESEND_FROM`, `RESEND_INR_PER_EMAIL`, `ESCALATION_EMAIL` |
-| **App** | Choose a dashboard password; generate a session secret | `DASHBOARD_PASSWORD`, `SESSION_SECRET`, `APP_URL` |
+| **App** | Public URL, used in transcript links in emails | `APP_URL` |
 
 All variables are listed with comments in [`.env.example`](.env.example).
 
@@ -100,7 +100,7 @@ npm run seed                    # loads T01–T20 into the database (dry run: no
 npm run dev
 ```
 
-Open http://localhost:3000 → log in with `DASHBOARD_PASSWORD`.
+Open http://localhost:3000.
 
 ### 3. Database
 
@@ -126,14 +126,14 @@ The GitHub repo is connected to Vercel; every push to `main` deploys. Set the en
 
 ## Dashboard
 
-`/dashboard` (password: `DASHBOARD_PASSWORD`)
+`/dashboard` — open to anyone with the link (no password). Callers' names, numbers and transcripts are visible, so add protection back before real calls go live.
 
 - **KPIs:** calls answered, % after hours (outside 10am–7pm or Sunday), median time to first response (enquiry → Vaani on the line; 0 for every inbound call, because Vaani picks up), qualified, booked, cost this month, cost per qualified lead, estimated pipeline (qualified × ₹11L, labelled as an estimate — the midpoint of the ₹8–14L average project value).
 - **Outcomes** donut, **Call → Qualified → Booked** step tracker, **rejection reasons**, **costs by source**, **live call feed** (refreshes every 8 s). Date filter: 7 days, 30 days, this month, last month, all time.
 - **Costs** are logged per call: Vaani minutes × `VAANI_RATE_PER_MIN`, Gemini `usageMetadata` tokens × your per-token price, Resend emails × `RESEND_INR_PER_EMAIL`.
 - **Leads & follow-ups** (`/dashboard/leads`): the front desk's queue — every call that needs a person, with the one question to ask and a tap-to-call number — plus a searchable list of every lead filtered by outcome. Mark a follow-up done with a note; reopen it if needed.
 - **Simulate call** (`/dashboard/simulate`): paste a transcript (or load T01–T20) and it runs the same pipeline as a real call. Tick *dry run* to classify and store without booking calendars or sending email.
-- Each call has a detail page; designers get a signed link to the same view (no password) in their handoff email.
+- Each call has a detail page; the designer's handoff email links straight to it.
 
 The seeded data is September's front-desk calls, so the transcripts show a person, not Vaani; the costs are what Vaani would have cost for the same minutes.
 

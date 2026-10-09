@@ -52,11 +52,6 @@ export function Nav({ active }: { active: "dashboard" | "leads" | "simulate" | "
         {link("/dashboard", "Dashboard", active === "dashboard")}
         {link("/dashboard/leads", "Leads & follow-ups", active === "leads")}
         {link("/dashboard/simulate", "Simulate call", active === "simulate")}
-        <form action="/logout" method="post">
-          <button className="label hover:text-ink cursor-pointer" type="submit">
-            Log out
-          </button>
-        </form>
       </nav>
     </header>
   );
