@@ -22,8 +22,10 @@ if (!agentId) {
   console.log(`Updating agent ${agentId}`);
 }
 
-await updatePersona(agentId);
-console.log("✓ Uploaded prompt (prompts/vaani-agent.md), greeting and language auto-detect");
+const { voiceName } = await updatePersona(agentId);
+console.log("✓ Uploaded prompt (prompts/vaani-agent.md), greeting (as Vaani) and female persona");
+console.log("✓ Speech: understands English, Hindi and Marathi (multilingual), speaks in an Indian-language voice");
+console.log(`• Voice in use: ${voiceName ?? "unknown"} — pick a female voice in Vaani → Agent → Edit Identity if this is a male voice`);
 
 const number = process.env.VAANI_PHONE_NUMBER;
 if (number) {

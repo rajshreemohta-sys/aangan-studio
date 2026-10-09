@@ -195,18 +195,48 @@ export async function createAgent(name: string): Promise<string> {
   return r.agent_id;
 }
 
-export async function updatePersona(agentId: string): Promise<void> {
-  await vaani(`/api/agent/${agentId}/persona`, {
+type PersonaConfig = {
+  persona?: {
+    senses_capabilities?: {
+      ears?: { stt?: { primary?: Record<string, unknown> } };
+      mouth?: { tts?: { primary?: { config?: Record<string, unknown> } & Record<string, unknown> } };
+    };
+  };
+};
+
+/**
+ * Uploads the script, greeting and identity, and sets up speech so Hindi and Marathi callers are
+ * understood (Deepgram "multi") and answered in an Indian voice. The voice itself is left as chosen
+ * in the Vaani dashboard: only its language is changed.
+ */
+export async function updatePersona(agentId: string): Promise<{ voiceName: string | null }> {
+  const current = await vaani<PersonaConfig & { persona?: { senses_capabilities?: { mouth?: { tts?: { primary?: { voice_name?: string } } } } } }>(`/api/agent/${agentId}/persona`, {
     method: "PATCH",
     body: JSON.stringify({
       identity: {
         system_prompt: agentPrompt(),
+        personality: { name: "Vaani", gender: "female", tone: "warm, calm, unhurried", style: "brief, one question at a time" },
         greeting_message: { agent_message: INBOUND_GREETING, agent_speech_delay: 1, interruptible: true, let_user_speak_first: false },
       },
-      // English, Hindi and Marathi callers: let Vaani detect the language.
-      senses_capabilities: { language: "en", auto_detect: true },
     }),
   });
+  const senses = current.persona?.senses_capabilities ?? {};
+  const stt = senses.ears?.stt?.primary ?? {};
+  const tts = senses.mouth?.tts?.primary ?? {};
+  await vaani(`/api/agent/${agentId}/persona`, {
+    method: "PATCH",
+    body: JSON.stringify({
+      senses_capabilities: {
+        language: "hi",
+        auto_detect: true,
+        // Deepgram's multilingual mode transcribes English, Hindi and code-switched speech in one stream.
+        ears: { stt: { primary: { ...stt, provider: stt.provider ?? "deepgram", model: stt.model ?? "nova-3", language: "multi" } } },
+        // An Indian-language voice speaks Hindi and Marathi properly and English with an Indian accent.
+        mouth: { tts: { primary: { ...tts, config: { ...(tts.config ?? {}), language: "hi" } } } },
+      },
+    }),
+  });
+  return { voiceName: (current.persona?.senses_capabilities?.mouth?.tts?.primary?.voice_name as string | undefined) ?? null };
 }
 
 export async function updateDeployment(agentId: string, number: string): Promise<void> {
