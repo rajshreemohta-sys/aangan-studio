@@ -8,10 +8,9 @@ const VERDICT_STYLE: Record<string, string> = { pass: "bg-blue text-white", fail
 type Step = { step: string; status: string; detail: string };
 
 export function CallView({ detail, internal }: { detail: CallDetail; internal: boolean }) {
-  const { call, lead, costs } = detail;
+  const { call, lead, booking, costs } = detail;
   const criteria = (lead?.criteria ?? []) as Criterion[];
   const flags = (lead?.flags ?? []) as string[];
-  const booking = Array.isArray(lead?.bookings) ? lead.bookings[0] : lead?.bookings;
   const steps = ((lead?.routing as { steps?: Step[] })?.steps ?? []) as Step[];
   const fields: [string, string | null | undefined][] = lead
     ? [
@@ -61,7 +60,7 @@ export function CallView({ detail, internal }: { detail: CallDetail; internal: b
           <div className="panel bg-lime p-6 fade-up" style={{ ["--i" as string]: 1 }}>
             <p className="label">Consultation {booking.status === "simulated" ? "(simulated — not on a real calendar)" : "booked"}</p>
             <p className="display text-3xl mt-2">{formatIst(booking.starts_at, { weekday: "long", day: "numeric", month: "long", hour: "numeric", minute: "2-digit" })}</p>
-            <p className="mt-1">with {booking.designers?.name ?? "a designer"} · {booking.visit_type || "place to confirm"}</p>
+            <p className="mt-1">with {booking.designer_name ?? "a designer"} · {booking.visit_type || "place to confirm"}</p>
           </div>
         )}
 

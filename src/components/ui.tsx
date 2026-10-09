@@ -37,7 +37,7 @@ export function Window({ title, children, className = "" }: { title: string; chi
   );
 }
 
-export function Nav({ active }: { active: "dashboard" | "simulate" | "call" }) {
+export function Nav({ active }: { active: "dashboard" | "leads" | "simulate" | "call" }) {
   const link = (href: string, label: string, on: boolean) => (
     <Link href={href} className={`label hover:text-ink transition-colors ${on ? "!text-ink" : ""}`}>
       {label}
@@ -50,6 +50,7 @@ export function Nav({ active }: { active: "dashboard" | "simulate" | "call" }) {
       </Link>
       <nav className="flex items-center gap-6">
         {link("/dashboard", "Dashboard", active === "dashboard")}
+        {link("/dashboard/leads", "Leads & follow-ups", active === "leads")}
         {link("/dashboard/simulate", "Simulate call", active === "simulate")}
         <form action="/logout" method="post">
           <button className="label hover:text-ink cursor-pointer" type="submit">

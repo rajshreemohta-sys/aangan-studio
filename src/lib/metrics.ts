@@ -1,10 +1,11 @@
 import type { Outcome, ReasonCode } from "./classification";
 import { OUTCOMES } from "./classification";
+import type { BookingRow, CallRow, CostRow, LeadRow } from "./database.types";
+import { one, query } from "./db";
 import { numberEnv } from "./env";
 import { istDate, istParts } from "./hours";
-import { db, must } from "./supabase";
 
-/** Everything the dashboard shows, computed from Supabase. No numbers are typed in by hand. */
+/** Everything the dashboard shows, computed from the database. No numbers are typed in by hand. */
 
 export const RANGES = {
   "7d": "Last 7 days",
@@ -50,7 +51,7 @@ export type FeedItem = {
   booked: boolean;
 };
 
-type CallJoin = {
+type CallWithLead = {
   id: string;
   started_at: string;
   enquiry_at: string;
@@ -59,36 +60,41 @@ type CallJoin = {
   direction: string;
   source: string;
   status: string;
-  leads: { name: string | null; locality: string | null; bhk: string | null; outcome: Outcome; reason_code: ReasonCode; reason_detail: string | null; bookings: { id: string } | { id: string }[] | null }[] | { name: string | null; locality: string | null; bhk: string | null; outcome: Outcome; reason_code: ReasonCode; reason_detail: string | null; bookings: { id: string } | { id: string }[] | null } | null;
+  name: string | null;
+  locality: string | null;
+  bhk: string | null;
+  outcome: Outcome | null;
+  reason_code: ReasonCode | null;
+  reason_detail: string | null;
+  booked: boolean;
 };
 
-const one = <T,>(x: T | T[] | null | undefined): T | null => (Array.isArray(x) ? (x[0] ?? null) : (x ?? null));
+const CALLS_WITH_LEADS = `
+  select c.id, c.started_at, c.enquiry_at, c.duration_seconds, c.after_hours, c.direction, c.source, c.status,
+         l.name, l.locality, l.bhk, l.outcome, l.reason_code, l.reason_detail, (b.id is not null) as booked
+  from calls c
+  left join leads l on l.call_id = c.id
+  left join bookings b on b.lead_id = l.id and b.status <> 'cancelled'`;
 
-function toFeed(c: CallJoin): FeedItem {
-  const lead = one(c.leads);
-  return {
-    id: c.id,
-    startedAt: c.started_at,
-    durationSeconds: c.duration_seconds,
-    afterHours: c.after_hours,
-    direction: c.direction,
-    source: c.source,
-    status: c.status,
-    name: lead?.name || null,
-    locality: lead?.locality || null,
-    bhk: lead?.bhk || null,
-    outcome: lead?.outcome ?? null,
-    reasonCode: lead?.reason_code ?? null,
-    reasonDetail: lead?.reason_detail ?? null,
-    booked: !!one(lead?.bookings),
-  };
-}
-
-const CALL_SELECT = "id, started_at, enquiry_at, duration_seconds, after_hours, direction, source, status, leads(name, locality, bhk, outcome, reason_code, reason_detail, bookings(id))";
+const toFeed = (c: CallWithLead): FeedItem => ({
+  id: c.id,
+  startedAt: new Date(c.started_at).toISOString(),
+  durationSeconds: c.duration_seconds,
+  afterHours: c.after_hours,
+  direction: c.direction,
+  source: c.source,
+  status: c.status,
+  name: c.name || null,
+  locality: c.locality || null,
+  bhk: c.bhk || null,
+  outcome: c.outcome,
+  reasonCode: c.reason_code,
+  reasonDetail: c.reason_detail,
+  booked: c.booked,
+});
 
 export async function recentFeed(limit = 12): Promise<FeedItem[]> {
-  const rows = must<CallJoin[]>(await db().from("calls").select(CALL_SELECT).order("started_at", { ascending: false }).limit(limit), "load feed");
-  return rows.map(toFeed);
+  return (await query<CallWithLead>(`${CALLS_WITH_LEADS} order by c.started_at desc limit $1`, [limit])).map(toFeed);
 }
 
 function median(xs: number[]): number | null {
@@ -100,75 +106,111 @@ function median(xs: number[]): number | null {
 
 export async function dashboardMetrics(range: RangeKey, now = new Date()) {
   const { from, to } = rangeBounds(range, now);
-  let callsQ = db().from("calls").select(CALL_SELECT).order("started_at", { ascending: false });
-  let costsQ = db().from("costs").select("source, amount_inr, units, created_at");
-  if (from) {
-    callsQ = callsQ.gte("started_at", from.toISOString());
-    costsQ = costsQ.gte("created_at", from.toISOString());
-  }
-  if (to) {
-    callsQ = callsQ.lt("started_at", to.toISOString());
-    costsQ = costsQ.lt("created_at", to.toISOString());
-  }
+  const fromIso = from?.toISOString() ?? null;
+  const toIso = to?.toISOString() ?? null;
   const monthStart = rangeBounds("month", now).from!;
-  const [callsRes, costsRes, monthCostsRes] = await Promise.all([
-    callsQ,
-    costsQ,
-    db().from("costs").select("amount_inr").gte("created_at", monthStart.toISOString()),
-  ]);
-  const calls = must<CallJoin[]>(callsRes, "load calls").map((c) => ({ raw: c, feed: toFeed(c) }));
-  const costs = must<{ source: string; amount_inr: number; units: number }[]>(costsRes, "load costs");
-  const monthCosts = must<{ amount_inr: number }[]>(monthCostsRes, "load month costs");
 
-  const answered = calls.filter((c) => c.raw.duration_seconds > 0);
+  const [calls, costs, monthCost, openFollowUps] = await Promise.all([
+    query<CallWithLead>(
+      `${CALLS_WITH_LEADS}
+       where ($1::timestamptz is null or c.started_at >= $1) and ($2::timestamptz is null or c.started_at < $2)
+       order by c.started_at desc`,
+      [fromIso, toIso],
+    ),
+    query<{ source: string; amount: string; units: string }>(
+      `select source, sum(amount_inr) as amount, sum(units) as units from costs
+       where ($1::timestamptz is null or created_at >= $1) and ($2::timestamptz is null or created_at < $2)
+       group by source`,
+      [fromIso, toIso],
+    ),
+    one<{ amount: string | null }>("select sum(amount_inr) as amount from costs where created_at >= $1", [monthStart.toISOString()]),
+    one<{ n: string }>("select count(*) as n from leads where follow_up_status = 'open'"),
+  ]);
+
   const outcomes = Object.fromEntries(OUTCOMES.map((o) => [o, 0])) as Record<Outcome, number>;
   const rejections: Partial<Record<ReasonCode, number>> = {};
-  for (const { feed } of calls) {
-    if (!feed.outcome) continue;
-    outcomes[feed.outcome]++;
-    if (feed.outcome === "REJECTED" && feed.reasonCode) rejections[feed.reasonCode] = (rejections[feed.reasonCode] ?? 0) + 1;
+  for (const c of calls) {
+    if (!c.outcome) continue;
+    outcomes[c.outcome]++;
+    if (c.outcome === "REJECTED" && c.reason_code) rejections[c.reason_code] = (rejections[c.reason_code] ?? 0) + 1;
   }
   const qualified = outcomes.QUALIFIED;
-  const booked = calls.filter((c) => c.feed.booked).length;
+  const booked = calls.filter((c) => c.booked).length;
 
   const costBySource: Record<string, { amount: number; units: number }> = {};
-  for (const c of costs) {
-    costBySource[c.source] ??= { amount: 0, units: 0 };
-    costBySource[c.source].amount += Number(c.amount_inr);
-    costBySource[c.source].units += Number(c.units);
-  }
-  const costInRange = costs.reduce((a, c) => a + Number(c.amount_inr), 0);
-  const costThisMonth = monthCosts.reduce((a, c) => a + Number(c.amount_inr), 0);
-
-  const responseSeconds = calls.map((c) => Math.max(0, (Date.parse(c.raw.started_at) - Date.parse(c.raw.enquiry_at)) / 1000));
+  for (const c of costs) costBySource[c.source] = { amount: Number(c.amount), units: Number(c.units) };
+  const costInRange = costs.reduce((a, c) => a + Number(c.amount), 0);
 
   return {
     range,
     rangeLabel: RANGES[range],
-    callsAnswered: answered.length,
+    callsAnswered: calls.filter((c) => c.duration_seconds > 0).length,
     totalCalls: calls.length,
-    afterHoursPct: calls.length ? (calls.filter((c) => c.raw.after_hours).length / calls.length) * 100 : 0,
-    medianFirstResponseSeconds: median(responseSeconds),
+    afterHoursPct: calls.length ? (calls.filter((c) => c.after_hours).length / calls.length) * 100 : 0,
+    medianFirstResponseSeconds: median(calls.map((c) => Math.max(0, (Date.parse(c.started_at) - Date.parse(c.enquiry_at)) / 1000))),
     qualified,
     booked,
     costInRange,
-    costThisMonth,
+    costThisMonth: Number(monthCost?.amount ?? 0),
     costPerQualified: qualified ? costInRange / qualified : null,
     pipelineEstimate: qualified * PIPELINE_VALUE_PER_QUALIFIED,
     outcomes,
     rejections,
     costBySource,
+    openFollowUps: Number(openFollowUps?.n ?? 0),
     vaaniRatePerMin: numberEnv("VAANI_RATE_PER_MIN", 6),
-    feed: calls.slice(0, 12).map((c) => c.feed),
+    feed: calls.slice(0, 12).map(toFeed),
   };
 }
 export type DashboardMetrics = Awaited<ReturnType<typeof dashboardMetrics>>;
 
+// ---------- leads & follow-ups ----------
+
+export type LeadListItem = Pick<
+  LeadRow,
+  "id" | "call_id" | "outcome" | "reason_code" | "reason_detail" | "name" | "phone" | "email" | "locality" | "bhk" | "property_type" | "scope" | "follow_up_status" | "follow_up_reason" | "follow_up_note" | "follow_up_done_at" | "created_at"
+> & { started_at: string; after_hours: boolean; booking_starts_at: string | null; designer_name: string | null };
+
+const LEAD_LIST = `
+  select l.id, l.call_id, l.outcome, l.reason_code, l.reason_detail, l.name, l.phone, l.email, l.locality, l.bhk,
+         l.property_type, l.scope, l.follow_up_status, l.follow_up_reason, l.follow_up_note, l.follow_up_done_at, l.created_at,
+         c.started_at, c.after_hours, b.starts_at as booking_starts_at, d.name as designer_name
+  from leads l
+  join calls c on c.id = l.call_id
+  left join bookings b on b.lead_id = l.id and b.status <> 'cancelled'
+  left join designers d on d.id = b.designer_id`;
+
+/** Open follow-ups first: escalations, then oldest first, so nothing waits behind newer calls. */
+export async function openFollowUps(limit = 50): Promise<LeadListItem[]> {
+  return query<LeadListItem>(
+    `${LEAD_LIST} where l.follow_up_status = 'open'
+     order by (l.outcome = 'ESCALATED') desc, c.started_at asc limit $1`,
+    [limit],
+  );
+}
+
+export async function listLeads(filter: { outcome?: Outcome | null; followUp?: "open" | "done" | null; search?: string | null }): Promise<LeadListItem[]> {
+  return query<LeadListItem>(
+    `${LEAD_LIST}
+     where ($1::text is null or l.outcome = $1)
+       and ($2::text is null or l.follow_up_status = $2)
+       and ($3::text is null or concat_ws(' ', l.name, l.phone, l.email, l.locality, l.scope) ilike '%' || $3 || '%')
+     order by c.started_at desc limit 500`,
+    [filter.outcome ?? null, filter.followUp ?? null, filter.search?.trim() || null],
+  );
+}
+
 export async function callDetail(callId: string) {
-  const call = await db().from("calls").select("*").eq("id", callId).maybeSingle();
-  if (!call.data) return null;
-  const lead = await db().from("leads").select("*, bookings(*, designers(name, email))").eq("call_id", callId).maybeSingle();
-  const costs = await db().from("costs").select("source, units, unit_label, amount_inr").eq("call_id", callId);
-  return { call: call.data, lead: lead.data, costs: costs.data ?? [] };
+  const call = await one<CallRow>("select * from calls where id = $1", [callId]);
+  if (!call) return null;
+  const lead = await one<LeadRow>("select * from leads where call_id = $1", [callId]);
+  const booking = lead
+    ? await one<BookingRow & { designer_name: string | null }>(
+        "select b.*, d.name as designer_name from bookings b left join designers d on d.id = b.designer_id where b.lead_id = $1",
+        [lead.id],
+      )
+    : null;
+  const costs = await query<Pick<CostRow, "source" | "units" | "unit_label" | "amount_inr">>("select source, units, unit_label, amount_inr from costs where call_id = $1", [callId]);
+  return { call, lead, booking, costs };
 }
 export type CallDetail = NonNullable<Awaited<ReturnType<typeof callDetail>>>;

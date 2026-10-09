@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense } from "react";
+import { FollowUpList } from "@/components/follow-ups";
 import { CountUp, Donut, LiveFeed } from "@/components/motion";
 import { inr, Nav, OUTCOME_COLORS, SectionHead, Window } from "@/components/ui";
 import { OUTCOME_LABELS, OUTCOMES, REASON_LABELS, type ReasonCode } from "@/lib/classification";
-import { dashboardMetrics, RANGES, type DashboardMetrics, type RangeKey } from "@/lib/metrics";
+import { dashboardMetrics, openFollowUps, RANGES, type DashboardMetrics, type RangeKey } from "@/lib/metrics";
 
 export const metadata = { title: "Dashboard · Aangan Studio" };
 
@@ -94,13 +95,13 @@ function Bars({ rows, empty }: { rows: { label: string; value: number; sub?: str
   );
 }
 
-const SOURCE_LABELS: Record<string, string> = { vaani: "Vaani voice minutes", gemini: "Gemini classification", resend: "Resend emails", hubspot: "HubSpot", calendar: "Google Calendar" };
+const SOURCE_LABELS: Record<string, string> = { vaani: "Vaani voice minutes", gemini: "Gemini classification", resend: "Resend emails", calendar: "Google Calendar" };
 
 async function Dashboard({ searchParams }: { searchParams: PageProps<"/dashboard">["searchParams"] }) {
   const sp = await searchParams;
   await connection();
   const range = (typeof sp.range === "string" && sp.range in RANGES ? sp.range : "all") as RangeKey;
-  const m = await dashboardMetrics(range);
+  const [m, followUps] = await Promise.all([dashboardMetrics(range), openFollowUps(4)]);
   const resp = formatDuration(m.medianFirstResponseSeconds);
   const outcomeTotal = OUTCOMES.reduce((a, o) => a + m.outcomes[o], 0);
   const rejections = (Object.entries(m.rejections) as [ReasonCode, number][]).sort((a, b) => b[1] - a[1]).map(([k, v]) => ({ label: REASON_LABELS[k], value: v }));
@@ -147,6 +148,17 @@ async function Dashboard({ searchParams }: { searchParams: PageProps<"/dashboard
         <Kpi i={8} label="Estimated pipeline" tone="ink" note={`Estimate · ${m.qualified} qualified × ₹11L average`}>
           <CountUp value={m.pipelineEstimate} format="lakh" />
         </Kpi>
+      </section>
+
+      <section className="mt-16">
+        <SectionHead label="Front desk" title={m.openFollowUps ? `${m.openFollowUps} calls need a person` : "No follow-ups waiting"}>
+          <Link href="/dashboard/leads" className="btn btn-ghost">
+            All leads &amp; follow-ups →
+          </Link>
+        </SectionHead>
+        <Window title="follow-ups · escalations first" className="fade-up">
+          <FollowUpList items={followUps} />
+        </Window>
       </section>
 
       {/* Outcomes — blue colour block with overlapping white cards */}
@@ -213,7 +225,7 @@ async function Dashboard({ searchParams }: { searchParams: PageProps<"/dashboard
             <div className="card p-5">
               <Bars rows={costRows} empty="No costs logged in this range." />
               <p className="text-xs text-muted mt-5 leading-relaxed">
-                Vaani at {inr(m.vaaniRatePerMin, 2)}/min · Gemini from token counts on every call · Resend per email. HubSpot and Google Calendar are on free plans.
+                Vaani at {inr(m.vaaniRatePerMin, 2)}/min · Gemini from token counts on every call · Resend per email. Google Calendar is free.
               </p>
             </div>
           </div>

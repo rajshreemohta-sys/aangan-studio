@@ -70,7 +70,7 @@ export function SimulateForm({ samples }: { samples: Sample[] }) {
       <label className="flex items-start gap-3 text-sm">
         <input type="checkbox" name="dry_run" className="mt-1" />
         <span>
-          Dry run — classify and store, but don&apos;t book calendars, send emails or touch HubSpot.
+          Dry run — classify and store, but don&apos;t book calendars or send emails.
           <span className="block text-muted">Leave unticked to run the full pipeline: the client email in the transcript will really receive mail.</span>
         </span>
       </label>

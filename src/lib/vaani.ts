@@ -1,11 +1,10 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
-import { env, requireEnv } from "./env";
+import { env } from "./env";
 
 /**
  * Everything Vaani-specific lives here, so a change in their API touches one file.
- * Field names follow the public Vaani quickstart (POST /calls/outbound_call) and are
- * read defensively from the webhook, because the post-call payload isn't documented
- * publicly. Confirm against the Vaani docs and adjust `normaliseWebhook` if needed.
+ * The post-call payload isn't documented publicly, so fields are read defensively.
+ * Confirm against the Vaani docs and adjust `normaliseWebhook` if needed.
  */
 
 export type NormalisedCall = {
@@ -18,7 +17,6 @@ export type NormalisedCall = {
   startedAt: Date;
   recordingUrl: string | null;
   escalationFlag: boolean;
-  hubspotContactId: string | null;
 };
 
 // ---------- webhook verification ----------
@@ -93,7 +91,6 @@ export function normaliseWebhook(body: unknown): NormalisedCall {
   const started = str(pick(root, "started_at", "start_time", "startedAt", "created_at", "timestamp"));
   const directionRaw = String(pick(root, "direction", "call_type", "type") ?? "inbound").toLowerCase();
   const direction = directionRaw.includes("out") ? "outbound" : "inbound";
-  const vars = pick(root, "dynamic_variables", "variables", "metadata");
   const fnCalls = JSON.stringify(pick(root, "function_calls", "tool_calls", "functions") ?? "");
 
   return {
@@ -106,31 +103,5 @@ export function normaliseWebhook(body: unknown): NormalisedCall {
     startedAt: started && !Number.isNaN(Date.parse(started)) ? new Date(started) : new Date(),
     recordingUrl: str(pick(root, "recording_url", "recordingUrl", "recording")),
     escalationFlag: fnCalls.includes("flag_escalation") || transcript.includes("[ESCALATE]"),
-    hubspotContactId: isObj(vars) ? str(vars.hubspot_contact_id) : null,
   };
-}
-
-// ---------- outbound callbacks ----------
-
-export async function startOutboundCall(toNumber: string, variables: Record<string, string>): Promise<{ callId: string | null }> {
-  const base = (env("VAANI_API_BASE") ?? "https://api.vaani.ai").replace(/\/$/, "");
-  const token = requireEnv("VAANI_API_KEY");
-  const res = await fetch(`${base}/calls/outbound_call`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-      // The quickstart authenticates with a JWT cookie; sending both keeps either scheme working.
-      Cookie: `access_token=${token}`,
-    },
-    body: JSON.stringify({
-      agent_number: requireEnv("VAANI_AGENT_NUMBER"),
-      to_number: toNumber,
-      dynamic_variables: { call_direction: "outbound", ...variables },
-    }),
-    signal: AbortSignal.timeout(15_000),
-  });
-  if (!res.ok) throw new Error(`Vaani outbound_call failed: ${res.status} ${(await res.text()).slice(0, 200)}`);
-  const data = (await res.json().catch(() => ({}))) as Json;
-  return { callId: str(pick(data, "call_id", "id", "data.call_id", "data.id")) };
 }

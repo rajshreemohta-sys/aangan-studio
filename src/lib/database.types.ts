@@ -1,4 +1,4 @@
-// Row shapes for the tables in supabase/migrations. Keep in sync with schema changes.
+// Row shapes for the tables in db/schema.sql. Keep in sync with schema changes.
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 export type BookingRow = {
@@ -14,16 +14,6 @@ export type BookingRow = {
   visit_type: string | null;
 };
 
-export type CallbackRow = {
-  contact_created_at: string | null;
-  created_at: string;
-  detail: string | null;
-  hubspot_contact_id: string;
-  phone: string | null;
-  status: string;
-  vaani_call_id: string | null;
-};
-
 export type CallRow = {
   after_hours: boolean;
   caller_phone: string | null;
@@ -33,7 +23,6 @@ export type CallRow = {
   enquiry_at: string;
   error: string | null;
   escalation_flag: boolean;
-  hubspot_contact_id: string | null;
   id: string;
   raw_payload: Json | null;
   raw_transcript: string;
@@ -82,8 +71,10 @@ export type LeadRow = {
   email: string | null;
   execution_or_advice: string | null;
   flags: Json;
-  hubspot_contact_id: string | null;
-  hubspot_deal_id: string | null;
+  follow_up_done_at: string | null;
+  follow_up_note: string | null;
+  follow_up_reason: string | null;
+  follow_up_status: "none" | "open" | "done";
   id: string;
   language: string | null;
   lead_source: string | null;

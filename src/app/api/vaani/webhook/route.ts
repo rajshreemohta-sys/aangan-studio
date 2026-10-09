@@ -1,5 +1,4 @@
 import { after } from "next/server";
-import { enquiryTimeFor } from "@/lib/callbacks";
 import { insertCall, processCall } from "@/lib/pipeline";
 import { normaliseWebhook, verifyWebhook } from "@/lib/vaani";
 
@@ -28,18 +27,15 @@ export async function POST(req: Request) {
     return Response.json({ error: e instanceof Error ? e.message : "bad payload" }, { status: 400 });
   }
 
-  const enquiryAt = call.direction === "outbound" ? await enquiryTimeFor(call.hubspotContactId) : null;
   const { id, duplicate } = await insertCall({
     vaaniCallId: call.vaaniCallId,
     source: "vaani",
     direction: call.direction,
     callerPhone: call.callerPhone,
-    hubspotContactId: call.hubspotContactId,
     transcript: call.transcript,
     summary: call.summary,
     durationSeconds: call.durationSeconds,
     startedAt: call.startedAt,
-    enquiryAt: enquiryAt ?? call.startedAt,
     escalationFlag: call.escalationFlag,
     recordingUrl: call.recordingUrl,
     rawPayload: body,

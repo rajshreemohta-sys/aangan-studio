@@ -1,10 +1,7 @@
--- Aangan Studio — call qualification schema.
--- All access goes through the server with the service-role key; RLS is on with no
--- policies, so the anon/publishable key can read or write nothing.
+-- Aangan Studio — call qualification schema (Neon Postgres).
+-- Applied by `npm run db:migrate`. Idempotent: safe to run again.
 
-create extension if not exists pgcrypto;
-
-create table public.designers (
+create table if not exists designers (
   id uuid primary key default gen_random_uuid(),
   name text not null,
   email text not null unique,
@@ -14,18 +11,17 @@ create table public.designers (
   created_at timestamptz not null default now()
 );
 
-create table public.calls (
+create table if not exists calls (
   id uuid primary key default gen_random_uuid(),
   vaani_call_id text unique,
   source text not null default 'vaani' check (source in ('vaani', 'simulated', 'seed')),
   direction text not null default 'inbound' check (direction in ('inbound', 'outbound')),
   caller_phone text,
-  hubspot_contact_id text,
   raw_transcript text not null default '',
   summary text,
   duration_seconds integer not null default 0,
   started_at timestamptz not null default now(),
-  -- When the enquiry first reached us: call start for inbound, HubSpot contact creation for callbacks.
+  -- When the enquiry first reached us. Equal to started_at for inbound calls.
   enquiry_at timestamptz not null default now(),
   after_hours boolean not null default false,
   escalation_flag boolean not null default false,
@@ -35,11 +31,11 @@ create table public.calls (
   raw_payload jsonb,
   created_at timestamptz not null default now()
 );
-create index calls_started_at_idx on public.calls (started_at desc);
+create index if not exists calls_started_at_idx on calls (started_at desc);
 
-create table public.leads (
+create table if not exists leads (
   id uuid primary key default gen_random_uuid(),
-  call_id uuid not null unique references public.calls (id) on delete cascade,
+  call_id uuid not null unique references calls (id) on delete cascade,
   outcome text not null check (outcome in ('QUALIFIED', 'HUMAN_REVIEW', 'REJECTED', 'ESCALATED', 'INCOMPLETE', 'NOT_ENQUIRY')),
   reason_code text not null,
   reason_detail text,
@@ -69,18 +65,22 @@ create table public.leads (
   consultation_preference text,
   visit_type text,
   lead_source text,
-  hubspot_contact_id text,
-  hubspot_deal_id text,
+  -- front-desk follow-up queue (replaces CRM tasks)
+  follow_up_status text not null default 'none' check (follow_up_status in ('none', 'open', 'done')),
+  follow_up_reason text,
+  follow_up_note text,
+  follow_up_done_at timestamptz,
   routing jsonb not null default '{}',
   created_at timestamptz not null default now()
 );
-create index leads_created_at_idx on public.leads (created_at desc);
-create index leads_outcome_idx on public.leads (outcome);
+create index if not exists leads_created_at_idx on leads (created_at desc);
+create index if not exists leads_outcome_idx on leads (outcome);
+create index if not exists leads_follow_up_idx on leads (follow_up_status) where follow_up_status = 'open';
 
-create table public.bookings (
+create table if not exists bookings (
   id uuid primary key default gen_random_uuid(),
-  lead_id uuid not null unique references public.leads (id) on delete cascade,
-  designer_id uuid references public.designers (id),
+  lead_id uuid not null unique references leads (id) on delete cascade,
+  designer_id uuid references designers (id),
   starts_at timestamptz not null,
   ends_at timestamptz not null,
   visit_type text,
@@ -89,34 +89,16 @@ create table public.bookings (
   status text not null default 'booked' check (status in ('booked', 'simulated', 'cancelled')),
   created_at timestamptz not null default now()
 );
-create index bookings_designer_idx on public.bookings (designer_id, starts_at);
+create index if not exists bookings_designer_idx on bookings (designer_id, starts_at);
 
-create table public.costs (
+create table if not exists costs (
   id uuid primary key default gen_random_uuid(),
-  call_id uuid references public.calls (id) on delete set null,
-  source text not null check (source in ('vaani', 'gemini', 'resend', 'hubspot', 'calendar')),
+  call_id uuid references calls (id) on delete cascade,
+  source text not null check (source in ('vaani', 'gemini', 'resend', 'calendar')),
   units numeric not null default 0,
   unit_label text,
   amount_inr numeric(12, 4) not null default 0,
   detail jsonb,
   created_at timestamptz not null default now()
 );
-create index costs_created_at_idx on public.costs (created_at desc);
-
--- HubSpot contacts we've already called back (or deliberately skipped), so the poller never dials twice.
-create table public.callbacks (
-  hubspot_contact_id text primary key,
-  phone text,
-  contact_created_at timestamptz,
-  status text not null check (status in ('queued', 'dialled', 'skipped', 'failed')),
-  vaani_call_id text,
-  detail text,
-  created_at timestamptz not null default now()
-);
-
-alter table public.designers enable row level security;
-alter table public.calls enable row level security;
-alter table public.leads enable row level security;
-alter table public.bookings enable row level security;
-alter table public.costs enable row level security;
-alter table public.callbacks enable row level security;
+create index if not exists costs_created_at_idx on costs (created_at desc);
