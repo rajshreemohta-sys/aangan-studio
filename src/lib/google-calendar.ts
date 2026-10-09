@@ -70,7 +70,7 @@ export async function createEvent(input: {
       location: input.location,
       start: { dateTime: input.start.toISOString(), timeZone: STUDIO_TZ },
       end: { dateTime: input.end.toISOString(), timeZone: STUDIO_TZ },
-      attendees: input.attendees,
+      ...(input.attendees.length ? { attendees: input.attendees } : {}),
       reminders: { useDefault: true },
     }),
   });

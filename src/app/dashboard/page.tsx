@@ -151,12 +151,12 @@ async function Dashboard({ searchParams }: { searchParams: PageProps<"/dashboard
       </section>
 
       <section className="mt-16">
-        <SectionHead label="Front desk" title={m.openFollowUps ? `${m.openFollowUps} calls need a person` : "No follow-ups waiting"}>
+        <SectionHead label="Front desk" title={m.openFollowUps ? `${m.openFollowUps} ${m.openFollowUps === 1 ? "lead needs" : "leads need"} review by the desk team` : "Nothing waiting for the desk team"}>
           <Link href="/dashboard/leads" className="btn btn-ghost">
-            All leads &amp; follow-ups →
+            All leads &amp; desk reviews →
           </Link>
         </SectionHead>
-        <Window title="follow-ups · escalations first" className="fade-up">
+        <Window title="desk review · urgent first" className="fade-up">
           <FollowUpList items={followUps} />
         </Window>
       </section>

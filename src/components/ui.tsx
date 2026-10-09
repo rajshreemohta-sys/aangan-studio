@@ -50,7 +50,7 @@ export function Nav({ active }: { active: "dashboard" | "leads" | "simulate" | "
       </Link>
       <nav className="flex items-center gap-6">
         {link("/dashboard", "Dashboard", active === "dashboard")}
-        {link("/dashboard/leads", "Leads & follow-ups", active === "leads")}
+        {link("/dashboard/leads", "Leads & desk review", active === "leads")}
         {link("/dashboard/simulate", "Simulate call", active === "simulate")}
       </nav>
     </header>

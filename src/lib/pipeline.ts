@@ -296,7 +296,8 @@ async function bookConsultation(leadId: string, c: Classification, now: Date, tr
 
   const designer = designers.find((d) => d.id === slot.designerId)!;
   const h = c.handoff;
-  const attendees = [{ email: designer.email, displayName: designer.name }];
+  // Demo designers are calendars, not people (their "email" is a calendar id), so only real addresses are invited.
+  const attendees = designer.email.endsWith("calendar.google.com") ? [] : [{ email: designer.email, displayName: designer.name }];
   if (h.email) attendees.push({ email: h.email, displayName: h.name || "Client" });
   const event = await createEvent({
     calendarId: designer.calendar_id,

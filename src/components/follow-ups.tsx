@@ -15,7 +15,7 @@ function since(d: string): string {
 }
 
 /** The front desk's to-do list: every call a person still has to act on. */
-export function FollowUpList({ items, empty = "Nothing waiting. Every call has been handled." }: { items: LeadListItem[]; empty?: string }) {
+export function FollowUpList({ items, empty = "Nothing waiting for the desk team. Every lead has been handled." }: { items: LeadListItem[]; empty?: string }) {
   if (!items.length) return <p className="p-6 text-muted text-sm">{empty}</p>;
   const canCall = telephonyEnabled();
   return (

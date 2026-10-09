@@ -24,14 +24,14 @@ async function Leads({ searchParams }: { searchParams: PageProps<"/dashboard/lea
       <section className="pt-6 pb-10 fade-up">
         <p className="label">Front desk</p>
         <h1 className="display text-5xl md:text-7xl mt-3">
-          {followUps.length ? `${followUps.length} to call back.` : "All caught up."}
+          {followUps.length ? `${followUps.length} for desk review.` : "All caught up."}
         </h1>
       </section>
 
       <section className="panel bg-pink p-4 md:p-8 fade-up" style={{ ["--i" as string]: 1 }}>
-        <p className="label">Follow-ups</p>
-        <h2 className="display text-3xl mt-2 mb-6">Needs a person</h2>
-        <Window title="open follow-ups · escalations first, then oldest">
+        <p className="label">Desk team</p>
+        <h2 className="display text-3xl mt-2 mb-6">Needs review by the desk team</h2>
+        <Window title="desk review · urgent first, then oldest">
           <FollowUpList items={followUps} />
         </Window>
       </section>
