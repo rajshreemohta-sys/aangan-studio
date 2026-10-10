@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense } from "react";
+import { DesignerConsultations } from "@/components/consultations";
 import { CountUp, Donut, LiveFeed } from "@/components/motion";
 import { inr, Nav, OUTCOME_COLORS, SectionHead, Window } from "@/components/ui";
 import { OUTCOME_LABELS, OUTCOMES, REASON_LABELS, type ReasonCode } from "@/lib/classification";
@@ -206,6 +207,11 @@ async function Dashboard({ searchParams }: { searchParams: PageProps<"/dashboard
             <Funnel m={m} />
           </div>
         </div>
+      </section>
+
+      <section className="mt-20">
+        <SectionHead label="Booked by Vaani" title="Designer consultations" />
+        <DesignerConsultations />
       </section>
 
       <section className="mt-20 grid lg:grid-cols-[1.25fr_1fr] gap-6 items-start">

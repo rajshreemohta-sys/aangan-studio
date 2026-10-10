@@ -58,9 +58,14 @@ export function CallView({ detail, internal }: { detail: CallDetail; internal: b
 
         {booking && (
           <div className="panel bg-lime p-6 fade-up" style={{ ["--i" as string]: 1 }}>
-            <p className="label">Consultation {booking.status === "simulated" ? "(simulated — not on a real calendar)" : "booked"}</p>
+            <p className="label">Consultation {booking.status === "simulated" ? "(sample data — not on a real calendar)" : "booked"}</p>
             <p className="display text-3xl mt-2">{formatIst(booking.starts_at, { weekday: "long", day: "numeric", month: "long", hour: "numeric", minute: "2-digit" })}</p>
             <p className="mt-1">with {booking.designer_name ?? "a designer"} · {booking.visit_type || "place to confirm"}</p>
+            {booking.calendar_event_url && (
+              <a href={booking.calendar_event_url} target="_blank" rel="noreferrer" className="inline-block mt-3 text-sm underline underline-offset-4">
+                Open in Google Calendar ↗
+              </a>
+            )}
           </div>
         )}
 

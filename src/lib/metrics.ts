@@ -233,3 +233,48 @@ export async function callDetail(callId: string) {
   return { call, lead, booking, costs };
 }
 export type CallDetail = NonNullable<Awaited<ReturnType<typeof callDetail>>>;
+
+// ---------- designer consultations ----------
+
+export type Consultation = {
+  booking_id: string;
+  starts_at: string;
+  ends_at: string;
+  visit_type: string | null;
+  status: "booked" | "simulated";
+  calendar_event_url: string | null;
+  designer_id: string;
+  designer_name: string;
+  call_id: string;
+  client_name: string | null;
+  locality: string | null;
+  bhk: string | null;
+  property_type: string | null;
+};
+
+/**
+ * Consultations booked on real designer calendars (status 'booked'). The September seed calls
+ * only have simulated slots, so they're counted separately rather than shown as real meetings.
+ */
+export async function designerConsultations() {
+  const [rows, designers, simulated] = await Promise.all([
+    query<Consultation>(
+      `select b.id as booking_id, b.starts_at, b.ends_at, b.visit_type, b.status, b.calendar_event_url,
+              d.id as designer_id, d.name as designer_name, l.call_id, l.name as client_name, l.locality, l.bhk, l.property_type
+       from bookings b
+       join designers d on d.id = b.designer_id
+       join leads l on l.id = b.lead_id
+       where b.status = 'booked'
+       order by b.starts_at asc`,
+    ),
+    query<{ id: string; name: string }>("select id, name from designers where active order by name"),
+    one<{ n: string }>("select count(*) as n from bookings where status = 'simulated'"),
+  ]);
+  const now = Date.now();
+  return {
+    designers,
+    upcoming: rows.filter((r) => new Date(r.ends_at).getTime() >= now),
+    past: rows.filter((r) => new Date(r.ends_at).getTime() < now).reverse(),
+    simulatedCount: Number(simulated?.n ?? 0),
+  };
+}
