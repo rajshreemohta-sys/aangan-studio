@@ -44,3 +44,6 @@ next-env.d.ts
 
 # internal pricing guide — never published (public repo)
 /context/pricing.md
+
+# local-only files
+/docs/
