@@ -1,11 +1,8 @@
-import Link from "next/link";
-import type { Outcome } from "@/lib/classification";
-import { formatIst } from "@/lib/hours";
-import { handledFollowUps, openFollowUps, type Queue } from "@/lib/metrics";
-import { DoneBadge, FollowUpList } from "./follow-ups";
-import { OutcomeChip, Window } from "./ui";
+import { openFollowUps, type Queue } from "@/lib/metrics";
+import { FollowUpList } from "./follow-ups";
+import { Window } from "./ui";
 
-const COPY: Record<Queue, { label: string; heading: (n: number) => string; empty: string; intro: string; panel: string; window: string; emptyHandled: string }> = {
+const COPY: Record<Queue, { label: string; heading: (n: number) => string; empty: string; intro: string; panel: string; window: string}> = {
   review: {
     label: "Desk review",
     heading: (n) => (n ? `${n} ${n === 1 ? "lead" : "leads"} to review.` : "All caught up."),
@@ -13,7 +10,6 @@ const COPY: Record<Queue, { label: string; heading: (n: number) => string; empty
     empty: "Nothing waiting. Every new enquiry has been handled.",
     panel: "bg-pink",
     window: "to review · oldest first",
-    emptyHandled: "Nothing handled yet.",
   },
   care: {
     label: "Client care",
@@ -22,13 +18,12 @@ const COPY: Record<Queue, { label: string; heading: (n: number) => string; empty
     empty: "No open concerns from existing clients.",
     panel: "bg-lime",
     window: "existing-client concerns · oldest first",
-    emptyHandled: "No concerns resolved yet.",
   },
 };
 
 export async function QueuePage({ queue }: { queue: Queue }) {
   const c = COPY[queue];
-  const [open, handled] = await Promise.all([openFollowUps(queue), handledFollowUps(queue)]);
+  const open = await openFollowUps(queue);
   return (
     <>
       <section className="pt-6 pb-10 fade-up">
@@ -43,24 +38,6 @@ export async function QueuePage({ queue }: { queue: Queue }) {
         </Window>
       </section>
 
-      <section className="mt-16 fade-up" style={{ ["--i" as string]: 2 }}>
-        <p className="label">Recently handled</p>
-        <h2 className="display text-3xl mt-2 mb-5">What the team did</h2>
-        <div className="card divide-y divide-line">
-          {handled.length === 0 && <p className="p-5 text-sm text-muted">{c.emptyHandled}</p>}
-          {handled.map((l) => (
-            <div key={l.id} className="p-4 flex flex-wrap items-center gap-3 text-sm">
-              <Link href={`/dashboard/calls/${l.call_id}`} className="hover:underline underline-offset-4">
-                {l.name || "Unknown caller"}
-              </Link>
-              <OutcomeChip outcome={l.outcome as Outcome} />
-              <span className="text-muted">called {formatIst(l.started_at, { day: "numeric", month: "short" })}</span>
-              <span className="flex-1" />
-              <DoneBadge lead={l} />
-            </div>
-          ))}
-        </div>
-      </section>
     </>
   );
 }

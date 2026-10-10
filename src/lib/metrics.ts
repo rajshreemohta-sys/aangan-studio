@@ -208,10 +208,6 @@ export async function openFollowUps(queue: Queue, limit = 100): Promise<LeadList
   return query<LeadListItem>(`${LEAD_LIST} where l.follow_up_status = 'open' and ${QUEUE_FILTER[queue]} order by c.started_at asc limit $1`, [limit]);
 }
 
-export async function handledFollowUps(queue: Queue, limit = 20): Promise<LeadListItem[]> {
-  return query<LeadListItem>(`${LEAD_LIST} where l.follow_up_status = 'done' and ${QUEUE_FILTER[queue]} order by l.follow_up_done_at desc limit $1`, [limit]);
-}
-
 export async function listLeads(filter: { outcome?: Outcome | null; followUp?: "open" | "done" | null; search?: string | null }): Promise<LeadListItem[]> {
   return query<LeadListItem>(
     `${LEAD_LIST}
