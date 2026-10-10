@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { Suspense } from "react";
-import { DoneBadge, FollowUpList } from "@/components/follow-ups";
-import { Nav, OutcomeChip, Window } from "@/components/ui";
+import { DoneBadge } from "@/components/follow-ups";
+import { Nav, OutcomeChip } from "@/components/ui";
 import { OUTCOME_LABELS, OUTCOMES, REASON_LABELS, type Outcome, type ReasonCode } from "@/lib/classification";
 import { formatIst } from "@/lib/hours";
-import { listLeads, openFollowUps } from "@/lib/metrics";
+import { listLeads } from "@/lib/metrics";
 
 export const metadata = { title: "Leads · Aangan Studio" };
 
@@ -17,30 +17,15 @@ async function Leads({ searchParams }: { searchParams: PageProps<"/dashboard/lea
   const sp = await searchParams;
   const outcome = typeof sp.outcome === "string" && (OUTCOMES as readonly string[]).includes(sp.outcome) ? (sp.outcome as Outcome) : null;
   const search = typeof sp.q === "string" ? sp.q : null;
-  const [followUps, leads] = await Promise.all([openFollowUps(), listLeads({ outcome, search })]);
+  const leads = await listLeads({ outcome, search });
 
   return (
     <>
-      <section className="pt-6 pb-10 fade-up">
-        <p className="label">Front desk</p>
-        <h1 className="display text-5xl md:text-7xl mt-3">
-          {followUps.length ? `${followUps.length} for desk review.` : "All caught up."}
-        </h1>
-      </section>
-
-      <section className="panel bg-pink p-4 md:p-8 fade-up" style={{ ["--i" as string]: 1 }}>
-        <p className="label">Desk team</p>
-        <h2 className="display text-3xl mt-2 mb-6">Needs review by the desk team</h2>
-        <Window title="desk review · urgent first, then oldest">
-          <FollowUpList items={followUps} />
-        </Window>
-      </section>
-
-      <section className="mt-16">
-        <div className="flex flex-wrap items-end justify-between gap-4 mb-5">
+      <section className="pt-6">
+        <div className="flex flex-wrap items-end justify-between gap-4 mb-8 fade-up">
           <div>
             <p className="label">Every enquiry</p>
-            <h2 className="display text-3xl md:text-4xl mt-2">All leads</h2>
+            <h1 className="display text-5xl md:text-7xl mt-3">All leads</h1>
           </div>
           <form action="/dashboard/leads" className="flex gap-2">
             {outcome && <input type="hidden" name="outcome" value={outcome} />}
@@ -65,7 +50,7 @@ async function Leads({ searchParams }: { searchParams: PageProps<"/dashboard/lea
           <table className="w-full text-sm">
             <thead>
               <tr className="text-left border-b border-line">
-                {["Caller", "Property", "Outcome", "Consultation", "Called", "Follow-up"].map((h) => (
+                {["Caller", "Property", "Outcome", "Consultation", "Called", "Team status"].map((h) => (
                   <th key={h} className="label font-normal px-4 py-3 whitespace-nowrap">
                     {h}
                   </th>
@@ -104,7 +89,7 @@ async function Leads({ searchParams }: { searchParams: PageProps<"/dashboard/lea
                     {l.after_hours && <div className="text-xs text-muted">after hours</div>}
                   </td>
                   <td className="px-4 py-3">
-                    {l.follow_up_status === "open" ? <span className="chip !bg-pink !border-pink">Open</span> : l.follow_up_status === "done" ? <DoneBadge lead={l} /> : <span className="text-muted">—</span>}
+                    {l.follow_up_status === "open" ? <Link href={l.outcome === "ESCALATED" ? "/dashboard/client-care" : "/dashboard/review"} className="chip !bg-pink !border-pink hover:underline">{l.outcome === "ESCALATED" ? "In client care" : "In desk review"}</Link> : l.follow_up_status === "done" ? <DoneBadge lead={l} /> : <span className="text-muted">—</span>}
                   </td>
                 </tr>
               ))}

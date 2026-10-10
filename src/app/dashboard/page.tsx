@@ -1,11 +1,10 @@
 import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense } from "react";
-import { FollowUpList } from "@/components/follow-ups";
 import { CountUp, Donut, LiveFeed } from "@/components/motion";
 import { inr, Nav, OUTCOME_COLORS, SectionHead, Window } from "@/components/ui";
 import { OUTCOME_LABELS, OUTCOMES, REASON_LABELS, type ReasonCode } from "@/lib/classification";
-import { dashboardMetrics, openFollowUps, RANGES, type DashboardMetrics, type RangeKey } from "@/lib/metrics";
+import { dashboardMetrics, RANGES, type DashboardMetrics, type RangeKey } from "@/lib/metrics";
 
 export const metadata = { title: "Dashboard · Aangan Studio" };
 
@@ -101,7 +100,7 @@ async function Dashboard({ searchParams }: { searchParams: PageProps<"/dashboard
   const sp = await searchParams;
   await connection();
   const range = (typeof sp.range === "string" && sp.range in RANGES ? sp.range : "all") as RangeKey;
-  const [m, followUps] = await Promise.all([dashboardMetrics(range), openFollowUps(4)]);
+  const m = await dashboardMetrics(range);
   const resp = formatDuration(m.medianFirstResponseSeconds);
   const outcomeTotal = OUTCOMES.reduce((a, o) => a + m.outcomes[o], 0);
   const rejections = (Object.entries(m.rejections) as [ReasonCode, number][]).sort((a, b) => b[1] - a[1]).map(([k, v]) => ({ label: REASON_LABELS[k], value: v }));
@@ -150,15 +149,27 @@ async function Dashboard({ searchParams }: { searchParams: PageProps<"/dashboard
         </Kpi>
       </section>
 
-      <section className="mt-16">
-        <SectionHead label="Front desk" title={m.openFollowUps ? `${m.openFollowUps} ${m.openFollowUps === 1 ? "lead needs" : "leads need"} review by the desk team` : "Nothing waiting for the desk team"}>
-          <Link href="/dashboard/leads" className="btn btn-ghost">
-            All leads &amp; desk reviews →
-          </Link>
-        </SectionHead>
-        <Window title="desk review · urgent first" className="fade-up">
-          <FollowUpList items={followUps} />
-        </Window>
+      <section className="mt-12 grid md:grid-cols-2 gap-4">
+        <Link href="/dashboard/review" className="panel bg-pink p-6 md:p-8 flex items-end justify-between gap-4 hover:opacity-90 transition-opacity fade-up" style={{ ["--i" as string]: 9 }}>
+          <div>
+            <p className="label">Desk review</p>
+            <p className="display text-3xl md:text-4xl mt-2">
+              {m.openReview ? `${m.openReview} ${m.openReview === 1 ? "lead" : "leads"} to review` : "Nothing to review"}
+            </p>
+            <p className="text-sm text-muted mt-2">New enquiries the desk team needs to call back</p>
+          </div>
+          <span className="btn whitespace-nowrap">Open →</span>
+        </Link>
+        <Link href="/dashboard/client-care" className="panel bg-lime p-6 md:p-8 flex items-end justify-between gap-4 hover:opacity-90 transition-opacity fade-up" style={{ ["--i" as string]: 10 }}>
+          <div>
+            <p className="label">Client care</p>
+            <p className="display text-3xl md:text-4xl mt-2">
+              {m.openCare ? `${m.openCare} existing-client ${m.openCare === 1 ? "concern" : "concerns"}` : "No open concerns"}
+            </p>
+            <p className="text-sm text-muted mt-2">Existing clients who called with a problem</p>
+          </div>
+          <span className="btn whitespace-nowrap">Open →</span>
+        </Link>
       </section>
 
       {/* Outcomes — blue colour block with overlapping white cards */}

@@ -37,7 +37,7 @@ export function Window({ title, children, className = "" }: { title: string; chi
   );
 }
 
-export function Nav({ active }: { active: "dashboard" | "leads" | "simulate" | "call" }) {
+export function Nav({ active }: { active: "dashboard" | "leads" | "review" | "care" | "simulate" | "call" }) {
   const link = (href: string, label: string, on: boolean) => (
     <Link href={href} className={`label hover:text-ink transition-colors ${on ? "!text-ink" : ""}`}>
       {label}
@@ -48,9 +48,11 @@ export function Nav({ active }: { active: "dashboard" | "leads" | "simulate" | "
       <Link href="/dashboard" className="label !text-ink">
         Aangan Studio <span className="text-muted">· Vaani</span>
       </Link>
-      <nav className="flex items-center gap-6">
+      <nav className="flex flex-wrap items-center gap-x-6 gap-y-2">
         {link("/dashboard", "Dashboard", active === "dashboard")}
-        {link("/dashboard/leads", "Leads & desk review", active === "leads")}
+        {link("/dashboard/leads", "All leads", active === "leads")}
+        {link("/dashboard/review", "Desk review", active === "review")}
+        {link("/dashboard/client-care", "Client care", active === "care")}
         {link("/dashboard/simulate", "Simulate call", active === "simulate")}
       </nav>
     </header>

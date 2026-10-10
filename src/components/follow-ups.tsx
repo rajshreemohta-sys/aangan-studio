@@ -49,7 +49,7 @@ export function FollowUpList({ items, empty = "Nothing waiting for the desk team
             {canCall && <CallButton leadId={l.id} hasPhone={!!l.phone} lastStatus={l.dispatch_status} lastAt={l.dispatch_at ? new Date(l.dispatch_at).toISOString() : null} />}
             <form action={completeFollowUp} className="flex gap-2 flex-1">
               <input type="hidden" name="lead_id" value={l.id} />
-              <input name="note" className="input !py-2 text-sm" placeholder="What happened? (optional)" aria-label={`Note for ${l.name || "caller"}`} />
+              <input name="note" className="input !py-2 text-sm" placeholder="Note for the team, e.g. “Called, booked Tue” (optional)" aria-label={`Note for ${l.name || "caller"}`} />
               <button className="btn !py-2 whitespace-nowrap" type="submit">
                 Done
               </button>

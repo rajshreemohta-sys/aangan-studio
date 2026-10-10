@@ -113,7 +113,7 @@ export async function dashboardMetrics(range: RangeKey, now = new Date()) {
   const toIso = to?.toISOString() ?? null;
   const monthStart = rangeBounds("month", now).from!;
 
-  const [calls, costs, monthCost, openFollowUps] = await Promise.all([
+  const [calls, costs, monthCost, queues] = await Promise.all([
     query<CallWithLead>(
       `${CALLS_WITH_LEADS}
        where ($1::timestamptz is null or c.started_at >= $1) and ($2::timestamptz is null or c.started_at < $2)
@@ -127,7 +127,10 @@ export async function dashboardMetrics(range: RangeKey, now = new Date()) {
       [fromIso, toIso],
     ),
     one<{ amount: string | null }>("select sum(amount_inr) as amount from costs where created_at >= $1", [monthStart.toISOString()]),
-    one<{ n: string }>("select count(*) as n from leads where follow_up_status = 'open'"),
+    one<{ review: string; care: string }>(
+      `select count(*) filter (where outcome <> 'ESCALATED') as review, count(*) filter (where outcome = 'ESCALATED') as care
+       from leads where follow_up_status = 'open'`,
+    ),
   ]);
 
   const outcomes = Object.fromEntries(OUTCOMES.map((o) => [o, 0])) as Record<Outcome, number>;
@@ -160,7 +163,8 @@ export async function dashboardMetrics(range: RangeKey, now = new Date()) {
     outcomes,
     rejections,
     costBySource,
-    openFollowUps: Number(openFollowUps?.n ?? 0),
+    openReview: Number(queues?.review ?? 0),
+    openCare: Number(queues?.care ?? 0),
     vaaniRatePerMin: numberEnv("VAANI_RATE_PER_MIN", 6),
     feed: calls.slice(0, 12).map(toFeed),
   };
@@ -193,13 +197,19 @@ const LEAD_LIST = `
   left join designers d on d.id = b.designer_id
   left join lateral (select status, created_at, error from dispatches where lead_id = l.id order by created_at desc limit 1) x on true`;
 
-/** Open follow-ups first: escalations, then oldest first, so nothing waits behind newer calls. */
-export async function openFollowUps(limit = 50): Promise<LeadListItem[]> {
-  return query<LeadListItem>(
-    `${LEAD_LIST} where l.follow_up_status = 'open'
-     order by (l.outcome = 'ESCALATED') desc, c.started_at asc limit $1`,
-    [limit],
-  );
+/**
+ * Two queues: "review" — new enquiries the desk team must call back (unclear, incomplete, not booked);
+ * "care" — existing clients who called with a problem (escalations). Oldest first, so nothing waits behind newer calls.
+ */
+export type Queue = "review" | "care";
+const QUEUE_FILTER: Record<Queue, string> = { review: "l.outcome <> 'ESCALATED'", care: "l.outcome = 'ESCALATED'" };
+
+export async function openFollowUps(queue: Queue, limit = 100): Promise<LeadListItem[]> {
+  return query<LeadListItem>(`${LEAD_LIST} where l.follow_up_status = 'open' and ${QUEUE_FILTER[queue]} order by c.started_at asc limit $1`, [limit]);
+}
+
+export async function handledFollowUps(queue: Queue, limit = 20): Promise<LeadListItem[]> {
+  return query<LeadListItem>(`${LEAD_LIST} where l.follow_up_status = 'done' and ${QUEUE_FILTER[queue]} order by l.follow_up_done_at desc limit $1`, [limit]);
 }
 
 export async function listLeads(filter: { outcome?: Outcome | null; followUp?: "open" | "done" | null; search?: string | null }): Promise<LeadListItem[]> {
