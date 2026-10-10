@@ -1,6 +1,7 @@
 import { CRITERION_LABELS, REASON_LABELS, type Criterion, type CriterionId, type Outcome, type ReasonCode } from "@/lib/classification";
 import { formatIst } from "@/lib/hours";
 import type { CallDetail } from "@/lib/metrics";
+import { Recording, Transcript } from "./transcript";
 import { inr, OutcomeChip, Window } from "./ui";
 
 const VERDICT_STYLE: Record<string, string> = { pass: "bg-blue text-white", fail: "bg-ink text-white", unclear: "bg-pink text-ink" };
@@ -135,22 +136,14 @@ export function CallView({ detail, internal }: { detail: CallDetail; internal: b
       </div>
 
       <Window title={`transcript · ${formatIst(call.started_at)} · ${Math.round(call.duration_seconds / 60)} min`} className="fade-up lg:sticky lg:top-6">
-        <div className="p-5 max-h-[78vh] overflow-auto text-[15px] leading-relaxed space-y-2.5">
-          {call.raw_transcript ? (
-            call.raw_transcript.split(/\r?\n/).filter((l: string) => l.trim()).map((line: string, i: number) => {
-              const m = line.match(/^(Agent|Vaani|Front Desk|Caller):\s*(.*)$/);
-              if (!m) return <p key={i} className="label pt-2">{line}</p>;
-              const agent = m[1] !== "Caller";
-              return (
-                <p key={i} className={agent ? "text-muted" : ""}>
-                  <span className={`label mr-2 ${agent ? "" : "!text-ink"}`}>{agent ? "Vaani" : "Caller"}</span>
-                  {m[2]}
-                </p>
-              );
-            })
-          ) : (
-            <p className="text-muted">No transcript — the call was missed or dropped.</p>
-          )}
+        {call.recording_url && call.vaani_call_id && (
+          <div className="px-5 pt-4">
+            <p className="label mb-2">Call recording</p>
+            <Recording callId={call.id} />
+          </div>
+        )}
+        <div className="p-5 max-h-[78vh] overflow-auto text-[15px] leading-relaxed">
+          <Transcript text={call.raw_transcript} />
         </div>
       </Window>
     </div>

@@ -20,6 +20,11 @@ describe("parseWebhook", () => {
     if (e.kind === "completed") expect(e.transcript).toBe("Agent: Hi! How can I help?\nCaller: Take down my name.");
   });
 
+  it("accepts call_duration in seconds as browser calls send it", () => {
+    const e = parseWebhook({ event: "call_postprocessing", call_id: "webrtc-1", data: { call_duration: 259.64, transcript: "AGENT: Hi" } });
+    expect(e).toMatchObject({ kind: "completed", durationSeconds: 260 });
+  });
+
   it("maps outbound failures", () => {
     expect(parseWebhook({ event: "call_no_answer", room_name: "r1" })).toEqual({ kind: "not_connected", callId: "r1", status: "no_answer", error: null });
     expect(parseWebhook({ event: "call_failed", room_name: "r2", error: "SIP_404" })).toMatchObject({ status: "failed", error: "SIP_404" });

@@ -278,3 +278,33 @@ export async function designerConsultations() {
     simulatedCount: Number(simulated?.n ?? 0),
   };
 }
+
+// ---------- calls with transcripts & recordings ----------
+
+export type CallListItem = {
+  id: string;
+  started_at: string;
+  duration_seconds: number;
+  channel: string;
+  source: string;
+  after_hours: boolean;
+  has_recording: boolean;
+  raw_transcript: string;
+  name: string | null;
+  locality: string | null;
+  bhk: string | null;
+  outcome: Outcome | null;
+  summary: string | null;
+};
+
+export async function listCalls(which: "real" | "all"): Promise<CallListItem[]> {
+  return query<CallListItem>(
+    `select c.id, c.started_at, c.duration_seconds, c.channel, c.source, c.after_hours,
+            (c.recording_url is not null and c.vaani_call_id is not null) as has_recording, c.raw_transcript,
+            l.name, l.locality, l.bhk, l.outcome, coalesce(l.summary, c.summary) as summary
+     from calls c left join leads l on l.call_id = c.id
+     where ($1 = 'all' or c.source = 'vaani')
+     order by c.started_at desc limit 200`,
+    [which],
+  );
+}

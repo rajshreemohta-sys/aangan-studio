@@ -53,6 +53,16 @@ export function normaliseTranscript(raw: string): string {
     .join("\n");
 }
 
+/**
+ * Vaani's docs say call_duration is milliseconds on call_postprocessing, but browser (WebRTC) calls send
+ * seconds (e.g. 259.64). No call lasts 3 hours, so anything above that must be milliseconds.
+ */
+export function durationSeconds(raw: unknown): number {
+  const v = Number(raw);
+  if (!Number.isFinite(v) || v <= 0) return 0;
+  return Math.round(v > 3 * 3600 ? v / 1000 : v);
+}
+
 export function parseWebhook(body: unknown): VaaniEvent {
   if (!isObj(body)) throw new Error("Webhook body is not a JSON object");
   const event = String(body.event ?? "");
@@ -61,12 +71,10 @@ export function parseWebhook(body: unknown): VaaniEvent {
 
   if (event === "call_postprocessing") {
     if (!callId) throw new Error("call_postprocessing without a call id");
-    const ms = Number(data.call_duration);
     return {
       kind: "completed",
       callId,
-      // call_duration is milliseconds on this event (seconds on call_ended).
-      durationSeconds: Number.isFinite(ms) ? Math.round(ms / 1000) : 0,
+      durationSeconds: durationSeconds(data.call_duration),
       transcript: normaliseTranscript(String(data.transcript ?? "")),
       summary: str(data.summary),
       recordingUrl: str(data.recording_url),
@@ -121,6 +129,14 @@ export function parseVaaniTime(s: string | undefined): Date | null {
   if (!s) return null;
   const d = new Date(/[zZ]|[+-]\d\d:?\d\d$/.test(s) ? s : `${s}Z`);
   return Number.isNaN(d.getTime()) ? null : d;
+}
+
+/** Streams a call recording from Vaani (audio/ogg). Range requests pass through so the player can seek. */
+export async function streamRecording(callId: string, range: string | null): Promise<Response> {
+  return fetch(`${BASE()}/api/stream/${encodeURIComponent(callId)}`, {
+    headers: { "X-API-Key": requireEnv("VAANI_API_KEY"), ...(range ? { Range: range } : {}) },
+    signal: AbortSignal.timeout(30_000),
+  });
 }
 
 // ---------- prompts ----------
