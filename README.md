@@ -41,6 +41,8 @@ The dashboard holds the September case calls (T01–T20) plus test leads from bu
 
 ## How it works
 
+![Components map](docs/components-map.jpg)
+
 ```mermaid
 flowchart LR
     C[Client on /talk<br/>browser voice call] -->|WebRTC session| V((Vaani<br/>prompts/vaani-agent.md))
