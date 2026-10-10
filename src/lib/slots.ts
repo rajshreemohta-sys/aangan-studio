@@ -8,7 +8,8 @@ import { istDate, istParts } from "./hours";
 
 export type Interval = { start: Date; end: Date };
 export type DesignerAvailability = { id: string; lastAssignedAt: Date | null; busy: Interval[] };
-export type Preference = { days: Set<number> | null; fromHour: number; toHour: number };
+/** Days the client can do (null = any working day) and a window in minutes after midnight, IST. */
+export type Preference = { days: Set<number> | null; from: number; to: number };
 export type Slot = { designerId: string; start: Date; end: Date };
 
 const DAY_START = 10;
@@ -28,7 +29,16 @@ const DAY_WORDS: [RegExp, number][] = [
   [/\bsat(urday)?s?\b|shanivar/i, 6],
 ];
 
-/** Reads free-text preferences like "weekdays after 6pm or weekends", "Saturday morning". */
+/** "3 pm" / "3:30pm" / "at 3" / "15:00" / "3 baje" → minutes after midnight. Bare numbers 1–7 are afternoon. */
+function clock(h: number, m: number, mer?: string): number | null {
+  if (h > 23 || m > 59) return null;
+  if (mer === "pm" && h < 12) h += 12;
+  else if (mer === "am" && h === 12) h = 0;
+  else if (!mer && h >= 1 && h <= 7) h += 12;
+  return h * 60 + m;
+}
+
+/** Reads free-text preferences like "weekdays after 6pm or weekends", "Saturday morning", "Saturday at 3pm". */
 export function parsePreference(text: string | null | undefined): Preference {
   const t = (text ?? "").toLowerCase();
   let days: Set<number> | null = null;
@@ -40,24 +50,33 @@ export function parsePreference(text: string | null | undefined): Preference {
   if (/weekend/.test(t)) add(6, 0);
   for (const [re, d] of DAY_WORDS) if (re.test(t)) add(d);
 
-  let fromHour = DAY_START;
-  let toHour = DAY_END;
-  if (/morning|subah|sakal/.test(t)) [fromHour, toHour] = [10, 13];
-  else if (/afternoon|dopahar|dupar/.test(t)) [fromHour, toHour] = [12, 17];
-  else if (/evening|shaam|sandhyakal/.test(t)) [fromHour, toHour] = [16, 19];
-  const after = t.match(/after\s+(\d{1,2})\s*(am|pm)?/);
-  if (after) {
-    let h = +after[1];
-    if ((after[2] === "pm" || (!after[2] && h < 8)) && h < 12) h += 12;
-    fromHour = Math.max(DAY_START, Math.min(h, DAY_END - 1));
+  let from = DAY_START * 60;
+  let to = DAY_END * 60;
+  if (/morning|subah|sakal/.test(t)) [from, to] = [10 * 60, 13 * 60];
+  else if (/afternoon|dopahar|dupar/.test(t)) [from, to] = [12 * 60, 17 * 60];
+  else if (/evening|shaam|sandhyakal/.test(t)) [from, to] = [16 * 60, 19 * 60];
+
+  const after = t.match(/after\s+(\d{1,2})(?::(\d{2}))?\s*(am|pm)?/);
+  const before = t.match(/before\s+(\d{1,2})(?::(\d{2}))?\s*(am|pm)?/);
+  if (after) from = clock(+after[1], +(after[2] ?? 0), after[3]) ?? from;
+  if (before) to = clock(+before[1], +(before[2] ?? 0), before[3]) ?? to;
+
+  // A specific time ("3pm", "at 3:30", "15:00", "3 baje") → exactly that hour-long slot.
+  if (!after && !before) {
+    const at =
+      t.match(/\b(\d{1,2})(?::(\d{2}))?\s*(am|pm|a\.m\.|p\.m\.)/) ??
+      t.match(/\b(?:at|around|by|@)\s*(\d{1,2})(?::(\d{2}))?\b(?!\s*(?:bhk|sq|lakh|days?|weeks?|months?))/) ??
+      t.match(/\b(\d{1,2}):(\d{2})\b/) ??
+      t.match(/\b(\d{1,2})(?::(\d{2}))?\s*baje/);
+    if (at) {
+      const mer = at[3]?.replace(/\./g, "") as "am" | "pm" | undefined;
+      const start = clock(+at[1], +(at[2] ?? 0), mer);
+      if (start !== null) [from, to] = [start, start + SLOT_MINUTES];
+    }
   }
-  const before = t.match(/before\s+(\d{1,2})\s*(am|pm)?/);
-  if (before) {
-    let h = +before[1];
-    if ((before[2] === "pm" || (!before[2] && h < 8)) && h < 12) h += 12;
-    toHour = Math.min(DAY_END, Math.max(h, DAY_START + 1));
-  }
-  return { days, fromHour, toHour };
+  from = Math.max(DAY_START * 60, Math.min(from, DAY_END * 60 - SLOT_MINUTES));
+  to = Math.min(DAY_END * 60, Math.max(to, from + SLOT_MINUTES));
+  return { days, from, to };
 }
 
 const overlaps = (a: Interval, b: Interval) => a.start < b.end && b.start < a.end;
@@ -75,7 +94,7 @@ export function findSlot(designers: DesignerAvailability[], pref: Preference, no
     workingDaysSeen++;
     if (pref.days && !pref.days.has(weekday)) continue;
 
-    for (let m = pref.fromHour * 60; m + SLOT_MINUTES <= pref.toHour * 60; m += STEP_MINUTES) {
+    for (let m = pref.from; m + SLOT_MINUTES <= pref.to; m += STEP_MINUTES) {
       const start = istDate(year, month, day, Math.floor(m / 60), m % 60);
       if (start < earliest) continue;
       const slot = { start, end: new Date(start.getTime() + SLOT_MINUTES * 60_000) };
