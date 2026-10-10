@@ -29,7 +29,7 @@ A class project (MESA, Founder's Office, Case 03), built as a working demo.
 3. **Ask her the price:** *"Roughly how much would that cost?"* She won't give a number. She explains the designer will cover it at the consultation (see [why](#decisions-worth-knowing)).
 4. She asks for your email **last**, for the meeting invite, then closes with one line. No recap.
 5. **About a minute after hanging up**, refresh the **dashboard**. The call appears in the live feed, tagged *web call*. Open it to see the transcript, the five criteria with evidence quotes, and the handoff.
-6. **Open Google Calendar.** The consultation sits on a designer's calendar (*Aryan / Meghna / Rohan · Aangan*) at Saturday 3pm, or the next Saturday at 3pm if today's is too soon.
+6. **Show the booking.** On the dashboard, **Designer consultations** lists each designer's meetings. Click **Open in Google Calendar ↗** to show the real event on the designer's calendar (*Aryan / Meghna / Rohan · Aangan*), at Saturday 3pm or the next Saturday at 3pm if today's is too soon.
 7. **Open your inbox.** The designer handoff email has arrived (the green banner shows who it would really go to).
 8. **Show the other paths:**
    - **Client care:** an existing client's complaint (e.g. Meera Kulkarni).
@@ -125,6 +125,7 @@ flowchart LR
   - costs by source
   - live call feed (refreshes every 8 s)
 - **Date filter:** last 7 days, last 30 days, this month, last month, all time.
+- **Designer consultations:** each designer's upcoming meetings (and recent past ones) from Google Calendar, with the client, the place and a link to the real calendar event. This is the proof that qualified calls become meetings.
 - **Two cards** link to **Desk review** (leads to call back) and **Client care** (existing-client concerns).
 - **All leads:** a searchable list, filterable by outcome, showing which team each open lead is with.
 - **Call page:** the transcript, the five criteria with evidence quotes, everything collected, the booking, what the system did at each step, and what the call cost.
